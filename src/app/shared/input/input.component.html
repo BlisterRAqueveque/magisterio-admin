@@ -1,0 +1,10 @@
+<div class="w-full relative">
+    <input [type]="type" [placeholder]="placeholder" [(ngModel)]="value" class="border-mag-50 border rounded-lg shadow-md shadow-mag-50 p-2 focus:outline-mag-100
+     outline-mag-50 transition-all duration-300 w-full" [ngClass]="{ 'pl-9': icon, 'pr-9': isPassword }">
+    @if(icon){
+    <i class="pi {{ icon }} absolute left-3 top-1/2 -translate-y-1/2"></i>
+    }
+    @if(isPassword) {
+    <i (click)="changeType()" class="pi {{ eye }} absolute right-3 top-1/2 -translate-y-1/2"></i>
+    }
+</div>

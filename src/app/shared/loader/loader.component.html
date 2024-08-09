@@ -1,0 +1,12 @@
+<div @fadeInOut class="bg-black/50 w-screen h-screen absolute top-0 left-0 z-50
+    backdrop-blur-sm flex justify-center items-center flex-col transition-all duration-500"
+      [ngClass]="{ 'opacity-0': !show }">
+      <div class="relative flex justify-center items-center">
+            <div class="w-16 h-16 rounded-full spin border-[18px] border-r-gray-300
+          border-l-gray-300 border-b-gray-300 border-t-transparent absolute"></div>
+            <div class="w-36 h-36 rounded-full animate-spin border-[18px] border-r-sky-950
+          border-l-sky-950 border-t-sky-950 border-b-transparent absolute"></div>
+            <div class="w-56 h-56 rounded-full spin border-[18px] border-r-gray-100
+          border-l-gray-100 border-b-gray-100 border-t-transparent"></div>
+      </div>
+</div>

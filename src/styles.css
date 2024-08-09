@@ -1,1 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Show | Hide containers */
+.hide {
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 0;
+  display: grid !important;
+  grid-template-rows: 0fr;
+}
+
+.hide > div {
+  overflow: hidden;
+}
+
+.show {
+  grid-template-rows: 1fr;
+  transition: all 0.3s ease;
+}
+/* End Show | Hide containers */
+
+/* Ripple button effects */
+button {
+  position: relative;
+  overflow: hidden;
+}
+button .ripple {
+  position: absolute;
+  border-radius: 50%;
+  /* To make it round */
+  background-color: rgba(255, 255, 255, 0.247);
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  /* for positioning */
+  margin-left: -50px;
+  animation: ripple 1s;
+  opacity: 0;
+}
+/* Add animation */
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(10);
+  }
+}
+/* End ripple button effects */
