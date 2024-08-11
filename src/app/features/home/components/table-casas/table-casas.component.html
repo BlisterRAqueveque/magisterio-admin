@@ -86,7 +86,7 @@
 
 <!-- ADD DIALOG -->
 <p-dialog [modal]="true" [(visible)]="visible" [draggable]="false" [style]="{ 'min-width': '50%' }"
-    (onHide)="resetValues()">
+    (onHide)="resetValues()" [closeOnEscape]="false">
     <!-- HEADER -->
     <ng-template pTemplate="header">
         <h4 class="text-2xl">{{ !casa ? 'Crear nueva casa mutual' : 'Modificar casa mutual'}}</h4>
@@ -148,6 +148,8 @@
             shadow-lg p-2" (click)="save()"><b>Crear nuevo registro</b></button>
         }
         @else {
+        <button pRipple class="bg-gray-400 text-white hover:bg-mag-600 transition-all duration-300 rounded-lg
+                shadow-lg p-2 mr-4" (click)="modal.present()"><b>Registros de edición</b></button>
         <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
             shadow-lg p-2" (click)="edit()"><b>Modificar registro</b></button>
         }
@@ -202,3 +204,54 @@
         </ng-template>
     </p-table>
 </p-sidebar>
+
+<m-modal header="Registro de ediciones" #modal>
+    <ng-template #body>
+        @if(casa) {
+        <p-table [value]="casa.ediciones">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <p>ID</p>
+                    </th>
+                    <th>
+                        <p>Descripción</p>
+                    </th>
+                    <th>
+                        <p>Fecha edición</p>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-edicion>
+                <tr>
+                    <td>{{ edicion.id }}</td>
+                    <td class="flex justify-between items-center">
+                        {{ edicion.descripcion }}
+                        @if(edicion.objeto){
+                        <div pTooltip="Ver datos" tooltipPosition="left"
+                            (click)="casaOld = edicion.objeto; modalObjeto.present()"
+                            class="bg-green-600 rounded-lg px-2 py-1 cursor-pointer center">
+                            <p class="text-white text-sm">Ver datos</p>
+                        </div>
+                        }
+                    </td>
+                    <td>{{ edicion.fecha_editado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        }
+    </ng-template>
+</m-modal>
+
+<m-modal #modalObjeto header="Datos anteriores">
+    <ng-template #body>
+        <p><b>CO: </b>{{ casaOld?.co }}</p>
+        <p><b>Nombre: </b>{{ casaOld?.nombre }}</p>
+        <p><b>Dirección: </b>{{ casaOld?.direccion }}</p>
+        <p><b>Teléfono: </b>{{ casaOld?.tel }}</p>
+        <p><b>Celular: </b>{{ casaOld?.cel }}</p>
+        <p><b>Correo: </b>{{ casaOld?.correo }}</p>
+        <p><b>Código postal: </b>{{ casaOld?.cp }}</p>
+        <p><b>Activo: </b>{{ casaOld?.activo ? 'Activo' : 'Inactivo' }}</p>
+    </ng-template>
+</m-modal>

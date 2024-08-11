@@ -3,7 +3,7 @@
     <!-- Input label -->
     @if(label) {
     <label class="absolute pointer-events-none transition-all duration-200"
-        [ngClass]="{ 'pl-9': icon, 'pl-4': !icon, '-top-6 translate-y-0 pl-1': hasFocus || value(), 'top-1/2 -translate-y-1/2': !hasFocus }">
+        [ngClass]="{ 'pl-9': icon, 'pl-4': !icon, '-top-6 translate-y-0 pl-1': hasFocus || value(), 'top-1/2 -translate-y-1/2': !hasFocus && !value() }">
         <b class="text-gray-600">{{ label }}</b>
     </label>
     }

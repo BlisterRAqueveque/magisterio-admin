@@ -1,0 +1,31 @@
+<div @fadeIn class="w-screen h-screen fixed top-0 left-0 z-[5000] flex justify-center items-center p-2
+  transition-all duration-100" [ngClass]="{ 'opacity-0': hide }">
+
+  <div class="w-screen h-screen bg-black/50 fixed top-0 left-0 z-0" (click)="dismiss()"></div>
+
+  <div class="max-w-[700px] rounded-lg bg-white shadow-lg w-full p-4 max-h-[90%] z-10">
+    <!-- Header -->
+    <div class="relative">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-10 flex justify-start items-center">
+          <h5 class="text-base">{{ header }}</h5>
+        </div>
+        <div class="col-span-2 flex justify-end items-center">
+          <i class="pi pi-times text-xl cursor-pointer ripple-effect" (click)="dismiss()"></i>
+        </div>
+      </div>
+    </div>
+    <hr class="my-2">
+
+    <!-- Body -->
+    <div class="overflow-y-auto max-h-[calc(85vh-120px)]">
+      <ng-template *ngTemplateOutlet="body"></ng-template>
+    </div>
+
+    <hr class="my-2">
+    <!-- Footer -->
+    <ng-template *ngTemplateOutlet="footer"></ng-template>
+
+  </div>
+
+</div>

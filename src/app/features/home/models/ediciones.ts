@@ -9,6 +9,9 @@ export interface EdicionI {
   descripcion: string;
   fecha_editado: Date;
 
+  //* Agregado solo front
+  objeto?: any;
+
   ediciones_usuarios?: UsuarioI;
 
   ediciones_casa_mutual?: CasaMutualI;

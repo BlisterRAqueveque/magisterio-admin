@@ -7,6 +7,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { DialogService } from './shared/confirm-dialog/dialog.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './core/jwt.interceptor';
+import { ModalService } from './shared/modal/modal.service';
+import { HostService } from './core/host.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,5 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([jwtInterceptor])),
     LoaderService,
     DialogService,
+    ModalService,
+    HostService,
   ],
 };

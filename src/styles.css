@@ -89,3 +89,7 @@ th > p {
 .p-sidebar-header {
   justify-content: space-between;
 }
+
+.p-multiselect {
+  border: #ffe485 solid 1px;
+}

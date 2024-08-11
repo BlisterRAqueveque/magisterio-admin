@@ -11,7 +11,7 @@ export class CasasMutualesService {
   private readonly url = environment.url;
 
   //! GET METHOD
-  getAll(params: HttpParams) {
+  getAll(params?: HttpParams) {
     const direction = this.url + 'casas-mutuales';
     return this.http
       .get<{

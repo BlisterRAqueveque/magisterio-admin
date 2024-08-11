@@ -1,21 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Paginator, PaginatorModule } from 'primeng/paginator';
-import { Table, TableModule } from 'primeng/table';
-import { UsuarioI } from '../../../login/models/usuario';
-import { UsuariosService } from '../../service/usuarios.service';
-import { CasaMutualI } from '../../models/casa.mutual';
-import { LoaderService } from '../../../../shared/loader/loader.service';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { TooltipModule } from 'primeng/tooltip';
-import { SidebarModule } from 'primeng/sidebar';
-import { InputComponent } from '../../../../shared/input/input.component';
 import { DialogModule } from 'primeng/dialog';
-import { SelectComponent } from '../../../../shared/select/select.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { Paginator, PaginatorModule } from 'primeng/paginator';
+import { SidebarModule } from 'primeng/sidebar';
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../../core/auth.service';
 import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
+import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
+import { InputComponent } from '../../../../shared/input/input.component';
+import { LoaderService } from '../../../../shared/loader/loader.service';
+import { SelectComponent } from '../../../../shared/select/select.component';
+import { UsuarioI } from '../../../login/models/usuario';
+import { CasaMutualI } from '../../models/casa.mutual';
+import { UsuariosService } from '../../service/usuarios.service';
+import { CasasMutualesService } from '../../service/casas.mutuales.service';
+import { RippleModule } from 'primeng/ripple';
+import { PresentModal } from '../../../../shared/modal/present-modal.component';
 
 @Component({
   selector: 'm-table-usuarios',
@@ -30,6 +33,9 @@ import { AddButtonComponent } from '../../../../shared/add-button/add-button.com
     DialogModule,
     SelectComponent,
     AddButtonComponent,
+    MultiSelectModule,
+    RippleModule,
+    PresentModal,
   ],
   templateUrl: './table-usuarios.component.html',
   styleUrl: './table-usuarios.component.css',
@@ -37,6 +43,7 @@ import { AddButtonComponent } from '../../../../shared/add-button/add-button.com
 export class TableUsuariosComponent {
   private readonly service = inject(UsuariosService);
   private readonly auth = inject(AuthService);
+  private readonly casasService = inject(CasasMutualesService);
 
   usuario!: UsuarioI | null;
 
@@ -45,13 +52,21 @@ export class TableUsuariosComponent {
   usuarios: UsuarioI[] = [];
   usuarios_deletes: UsuarioI[] = [];
 
+  casas_mutuales: CasaMutualI[] = [];
+  selected_casas: CasaMutualI[] = [];
+
   params = new HttpParams();
 
   async ngAfterViewInit() {
+    this.usuario = await this.auth.returnUserInfo();
     this.params = this.params.set('page', 1);
     this.params = this.params.set('perPage', 10);
     this.params = this.params.set('sortBy', 'DESC');
     this.getHistoric();
+
+    this.casasService.getAll().subscribe((data) => {
+      this.casas_mutuales = data.result;
+    });
 
     this.service.getDeletes().subscribe((data) => {
       this.usuarios_deletes = data;
@@ -123,8 +138,29 @@ export class TableUsuariosComponent {
   //! DIALOG METHODS -------------------------------------------------------------------->
   selectedUsuario: UsuarioI | undefined;
   otherAction = false;
-  onRowSelect(selectedItem: any) {
-    this.visible = true;
+  onRowSelect(item: UsuarioI) {
+    if (!this.otherAction) {
+      this.visible = true;
+      this.selectedUsuario = item;
+      if (this.selectedUsuario) {
+        this._usuario = this.selectedUsuario.usuario;
+        this.correo = this.selectedUsuario.correo;
+        this.nombre = this.selectedUsuario.nombre;
+        this.apellido = this.selectedUsuario.apellido;
+        this.activo = this.selectedUsuario.activo;
+        this.selected_casas = this.casas_mutuales.filter((c) =>
+          this.selectedUsuario?.casa_mutual.find((cu) => cu.id === c.id)
+        );
+        this.selectedUsuario.ediciones.forEach((e) => {
+          if (e.descripcion.includes(' | antes: ')) {
+            const jsonData = e.descripcion.split(' | antes: ');
+            e.descripcion = jsonData[0];
+            e.objeto = JSON.parse(jsonData[1]);
+          }
+        });
+      }
+    }
+    this.otherAction = false;
   }
 
   resetValues() {
@@ -133,7 +169,7 @@ export class TableUsuariosComponent {
     this.correo = undefined;
     this.nombre = undefined;
     this.apellido = undefined;
-    this.casa_mutual = undefined;
+    this.selected_casas = [];
     this.activo = undefined;
   }
   //! DIALOG METHODS -------------------------------------------------------------------->
@@ -143,7 +179,6 @@ export class TableUsuariosComponent {
   correo!: string | undefined;
   nombre!: string | undefined;
   apellido!: string | undefined;
-  casa_mutual!: CasaMutualI | undefined;
   activo: boolean | undefined;
 
   private readonly dialog = inject(DialogService);
@@ -170,7 +205,7 @@ export class TableUsuariosComponent {
       correo: this.correo,
       nombre: this.nombre,
       apellido: this.apellido,
-      casa_mutual: [this.casa_mutual!],
+      casa_mutual: this.selected_casas,
       ediciones: [
         {
           descripcion: `Creado por: ${this.usuario?.nombre_completo}`,
@@ -232,17 +267,20 @@ export class TableUsuariosComponent {
     );
   }
   onEdit() {
+    const { ediciones, ...oldUsuario } = this.selectedUsuario!;
     const editUsuario: Partial<UsuarioI> = {
+      id: this.selectedUsuario?.id,
       usuario: this._usuario,
       correo: this.correo,
       nombre: this.nombre,
       apellido: this.apellido,
-      casa_mutual: [this.casa_mutual!],
+      nombre_completo: `${this.nombre} ${this.apellido}`,
+      casa_mutual: this.selected_casas,
       ediciones: [
         {
           descripcion: `Editado por: ${
             this.usuario?.nombre_completo
-          } | antes: ${JSON.stringify(this.selectedUsuario)}`,
+          } | antes: ${JSON.stringify(oldUsuario)}`,
           fecha_editado: new Date(),
         },
       ],
@@ -470,4 +508,6 @@ export class TableUsuariosComponent {
     });
   }
   //! DELETE METHODS --------------------------------------------------------------------->
+
+  userOld: UsuarioI | undefined;
 }

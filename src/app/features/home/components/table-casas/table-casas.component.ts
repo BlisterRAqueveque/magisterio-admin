@@ -16,6 +16,7 @@ import { CasaMutualI } from '../../models/casa.mutual';
 import { CasasMutualesService } from '../../service/casas.mutuales.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { SidebarModule } from 'primeng/sidebar';
+import { PresentModal } from '../../../../shared/modal/present-modal.component';
 
 @Component({
   selector: 'm-table-casas',
@@ -31,6 +32,7 @@ import { SidebarModule } from 'primeng/sidebar';
     ConfirmDialogModule,
     TooltipModule,
     SidebarModule,
+    PresentModal,
   ],
   templateUrl: './table-casas.component.html',
   styleUrl: './table-casas.component.css',
@@ -133,6 +135,13 @@ export class TableCasasComponent {
         this.cp = this.casa.cp;
         this.co = this.casa.co;
         this.activo = this.casa.activo;
+        this.casa.ediciones.forEach((e) => {
+          if (e.descripcion.includes(' | antes: ')) {
+            const jsonData = e.descripcion.split(' | antes: ');
+            e.descripcion = jsonData[0];
+            e.objeto = JSON.parse(jsonData[1]);
+          }
+        });
       }
     }
     this.otherAction = false;
@@ -254,6 +263,7 @@ export class TableCasasComponent {
     );
   }
   onEdit() {
+    const { ediciones, ...oldCasa } = this.casa!;
     const editCasa: Partial<CasaMutualI> = {
       id: this.casa?.id,
       co: this.co,
@@ -267,7 +277,7 @@ export class TableCasasComponent {
         {
           descripcion: `Editado por: ${
             this.usuario?.nombre_completo
-          } | antes: ${JSON.stringify(this.casa)}`,
+          } | antes: ${JSON.stringify(oldCasa)}`,
           fecha_editado: new Date(),
         },
       ],
@@ -499,4 +509,6 @@ export class TableCasasComponent {
     });
   }
   //! DELETE METHODS --------------------------------------------------------------------->
+
+  casaOld: CasaMutualI | undefined;
 }
