@@ -1,10 +1,30 @@
 <div class="w-full relative">
-    <input [type]="type" [placeholder]="placeholder" [(ngModel)]="value" class="border-mag-50 border rounded-lg shadow-md shadow-mag-50 p-2 focus:outline-mag-100
-     outline-mag-50 transition-all duration-300 w-full" [ngClass]="{ 'pl-9': icon, 'pr-9': isPassword }">
+
+    <!-- Input label -->
+    @if(label) {
+    <label class="absolute pointer-events-none transition-all duration-200"
+        [ngClass]="{ 'pl-9': icon, 'pl-4': !icon, '-top-6 translate-y-0 pl-1': hasFocus || value(), 'top-1/2 -translate-y-1/2': !hasFocus }">
+        <b class="text-gray-600">{{ label }}</b>
+    </label>
+    }
+
+    <!-- Input -->
+    <input [type]="type" (focus)="hasFocus = true" (blur)="hasFocus = false" [readOnly]="readonly"
+        [placeholder]="label && hasFocus ? placeholder : label && !hasFocus ? '' : placeholder" [(ngModel)]="value"
+        class="border-mag-200 border rounded-lg p-4 outline-mag-300 transition-all duration-300 w-full"
+        [ngClass]="{ 'pl-9': icon, 'pr-9': isPassword, 'border-red-600 outline-red-600': error && !value() }">
+
+    <!-- Icon -->
     @if(icon){
-    <i class="pi {{ icon }} absolute left-3 top-1/2 -translate-y-1/2"></i>
+    <i class="pi {{ icon }} absolute left-3 top-1/2 -translate-y-1/2 text-mag-700"></i>
     }
     @if(isPassword) {
-    <i (click)="changeType()" class="pi {{ eye }} absolute right-3 top-1/2 -translate-y-1/2"></i>
+    <i (click)="changeType()" class="pi {{ eye }} absolute right-3 top-1/2 -translate-y-1/2 text-mag-700"></i>
     }
+
+</div>
+<div class="hide" [ngClass]="{ 'show': error && !value() }">
+    <div>
+        <p class="pl-4 text-red-600">{{ errorMessage }}*</p>
+    </div>
 </div>

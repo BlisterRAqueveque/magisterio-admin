@@ -23,11 +23,6 @@ export class LoaderService {
       .resolveComponentFactory(LoaderComponent)
       .create(this.injector);
 
-    //Instancias del componente
-    //(this.componentRef.instance as LoaderComponent).src = src;
-
-    // const componentRef = this.viewContainerRef.createComponent(component);
-
     // 2. Attach component to the appRef so that it's inside the ng component tree
     this.appRef.attachView(this.componentRef.hostView);
 
@@ -42,8 +37,6 @@ export class LoaderService {
   dismiss() {
     this.appRef.detachView(this.componentRef.hostView);
     (this.componentRef as any).show = false;
-    setTimeout(() => {
-      this.componentRef.destroy();
-    }, 5000);
+    this.componentRef.destroy();
   }
 }

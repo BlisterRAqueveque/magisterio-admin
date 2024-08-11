@@ -8,13 +8,18 @@ import {
   catchError,
   EMPTY,
   firstValueFrom,
+  ignoreElements,
   map,
   of,
   switchMap,
   take,
   tap,
 } from 'rxjs';
-import { LoginResponse, LoginUserDto } from '../features/login/models/usuario';
+import {
+  LoginResponse,
+  LoginUserDto,
+  UsuarioI,
+} from '../features/login/models/usuario';
 import { handleError } from './tools';
 
 const USER_COOKIE_KEY = 'x-token';
@@ -30,7 +35,7 @@ export class AuthService {
   private url = environment.url;
 
   /** @description Variable para recuperar la información del usuario */
-  private user = new BehaviorSubject<LoginResponse | null>(null);
+  private user = new BehaviorSubject<UsuarioI | null>(null);
 
   login(user: string, pass: string, param?: any) {
     let url = this.url + 'usuarios/auth/login';
@@ -45,10 +50,9 @@ export class AuthService {
       .pipe(
         map((data) => data.result),
         tap((userToken) => this.saveTokenToCookie(userToken.token.token)),
-        tap((userToken) => this.pushNewUser(userToken)),
+        tap((userToken) => this.pushNewUser(userToken.usuario)),
         tap(() => this.redirect(param)),
         catchError((e) => handleError(e))
-        //ignoreElements()
       );
   }
 
@@ -58,7 +62,7 @@ export class AuthService {
   }
 
   /** @description Guardamos el usuario en una variable tipo Behavior Subject */
-  private pushNewUser(user: LoginResponse) {
+  private pushNewUser(user: UsuarioI) {
     this.user.next(user);
   }
 
@@ -76,7 +80,7 @@ export class AuthService {
           take(1),
           switchMap((data) => {
             if (data == null) {
-              return this.http.get<LoginResponse>(direction).pipe(
+              return this.http.get<UsuarioI>(direction).pipe(
                 tap((userToken) => this.pushNewUser(userToken)),
                 catchError((error) => {
                   this.logout();
@@ -88,7 +92,7 @@ export class AuthService {
           })
         )
       );
-      if (userData) return userData.usuario;
+      if (userData) return userData;
       else {
         this.logout();
         return null;

@@ -1,0 +1,162 @@
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+<div class="lg:flex lg:justify-center md:flex md:justify-center w-full overflow-auto sm:px-4 lg:px-0 md:px-0 px-4">
+    <p-table class="lg:w-3/4 md:w-3/4" #table [value]="usuarios" dataKey="id" (onSort)="onSort($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">
+                    <p>ID <i class="pi pi-sort-alt"></i></p>
+                </th>
+                <th>
+                    <p>Nombre</p>
+                </th>
+                <th>
+                    <p>Casa mutual</p>
+                </th>
+                <th>
+                    <p>Creado por</p>
+                </th>
+                <th>
+                    <p>Fecha creado</p>
+                </th>
+                <th>
+                    <p>Estado</p>
+                </th>
+                <th>
+                    <p class="text-center">Acciones</p>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+            <tr class="item" (click)="onRowSelect(usuario)">
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre_completo }}</td>
+                <td>{{ usuario.casa_mutual.length > 0 ? printCasaMutual(usuario.casa_mutual) : 'Sin definir' }}</td>
+                <td>{{ usuario.creado_por ? usuario.creado_por.nombre_completo : 'Sin definir' }}</td>
+                <td>{{ usuario.fecha_creado | date: 'dd/MM/yyyy' }}</td>
+                <!-- Estado -->
+                <td pTooltip="{{ 'Activo: Se muestran los registros en las aplicaciones\n\nInactivo: No se muestran los registros en las aplicaciones' }}"
+                    tooltipPosition="left" class="flex items-center">
+                    <p class="text-sm p-2 text-white rounded-lg"
+                        [ngClass]="{ 'bg-green-600': usuario.activo, 'bg-red-600': !usuario.activo }">
+                        <b>{{ usuario.activo ? 'Activo' : 'Inactivo' }}</b>
+                    </p>
+                </td>
+                <!-- Acciones -->
+                <td>
+                    <div class="w-full flex justify-between items-center">
+                        <!-- Activar | desactivar -->
+                        <div pTooltip="Activar | Desactivar" tooltipPosition="left"
+                            (click)="otherAction = true; changeState(usuario.activo, usuario.id)"
+                            class="center rounded-full px-2 py-1 cursor-pointer"
+                            [ngClass]="{ 'bg-mag-300': usuario.activo, 'bg-green-600': !usuario.activo }">
+                            <i class="pi pi-minus-circle text-white text-xl"></i>
+                        </div>
+                        <!-- Eliminar -->
+                        <div pTooltip="Eliminar" tooltipPosition="left"
+                            (click)="otherAction = true; softDelete(usuario)"
+                            class="bg-red-600 rounded-full px-2 py-1 cursor-pointer center">
+                            <i class="pi pi-trash text-white text-xl"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+
+<div class="w-full flex justify-end">
+    <div class="center p-2 rounded-md bg-mag-400 cursor-pointer" pTooltip="Ver registros eliminados"
+        (click)="sidebarVisible = true" tooltipPosition="left">
+        <i class="pi pi-window-maximize"></i>
+    </div>
+</div>
+
+<!-- ADD BUTTON -->
+<m-add-button (click)="visible = true" />
+
+<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [draggable]="false"
+    [style]="{ 'min-width': '50%' }" (onHide)="resetValues()">
+    <ng-template pTemplate="header">
+        <h4 class="text-2xl">Crear nuevo usuario</h4>
+    </ng-template>
+    <div class="pt-7">
+        <m-input label="ID" type="number" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese usuario" type="text" label="Usuario" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese correo" label="Correo electrónico" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese nombre" label="Nombre" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese apellido" label="Apellido" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-select />
+    </div>
+    <ng-template pTemplate="footer">
+        <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2">Crear</button>
+    </ng-template>
+</p-dialog>
+
+<p-sidebar [(visible)]="sidebarVisible" [fullScreen]="true">
+    <ng-template pTemplate="header">
+        <span class="font-semibold text-xl">
+            Casas mutuales eliminadas
+        </span>
+    </ng-template>
+    <p-table [value]="usuarios_deletes">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <p>ID</p>
+                </th>
+                <th>
+                    <p>Nombre</p>
+                </th>
+                <th>
+                    <p>Creado por</p>
+                </th>
+                <th>
+                    <p>Fecha creado</p>
+                </th>
+                <th>
+                    <p>Fecha eliminado</p>
+                </th>
+                <th>
+                    <p class="text-center">Acciones</p>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-casa>
+            <tr>
+                <td>{{ casa.id }}</td>
+                <td>{{ casa.nombre }}</td>
+                <td>{{ casa.creado_por ? casa.creado_por.nombre_completo : 'Sin definir' }}</td>
+                <td>{{ casa.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ casa.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <div class="w-full flex justify-center items-center">
+                    <!-- Restaurar -->
+                    <div pTooltip="Eliminar" tooltipPosition="left" (click)="otherAction = true; restore(casa)"
+                        class="bg-green-600 rounded-full px-2 py-1 cursor-pointer center">
+                        <i class="pi pi-check-circle text-white text-xl"></i>
+                    </div>
+                </div>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-sidebar>

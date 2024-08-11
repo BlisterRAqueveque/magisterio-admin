@@ -26,11 +26,12 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       const CODES = [401, 403];
       const response = e.error;
       if (
-        CODES.includes(e.status) && response
+        CODES.includes(e.status) &&
+        (response
           ? response.message !== 'Not found' &&
             response.message !== 'Wrong credentials' &&
             response.message !== 'Server error'
-          : true
+          : true)
       ) {
         auth.logout();
       }

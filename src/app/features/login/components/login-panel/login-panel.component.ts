@@ -1,13 +1,14 @@
 import { Component, HostListener, inject } from '@angular/core';
+import { AuthService } from '../../../../core/auth.service';
+import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { InputComponent } from '../../../../shared/input/input.component';
 import { LoaderService } from '../../../../shared/loader/loader.service';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { AuthService } from '../../../../core/auth.service';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'm-login-panel',
   standalone: true,
-  imports: [InputComponent],
+  imports: [InputComponent, RippleModule],
   templateUrl: './login-panel.component.html',
   styleUrl: './login-panel.component.css',
 })

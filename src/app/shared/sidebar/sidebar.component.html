@@ -3,8 +3,8 @@
         items-center overflow-auto lg:w-20 md:w-20 transition-all duration-200"
         [ngClass]="{ 'sm:w-20 w-20': showSideBar, 'sm:w-0 w-0': !showSideBar }">
         @for(button of buttons; track $index){
-        <div [ngClass]="{ 'bg-mag-300': button.activo, 'text-white': button.activo}" [pTooltip]="button.nombre"
-            tooltipPosition="right" class="rounded-full bg-white flex py-2 px-3 shadow-md mb-8 cursor-pointer
+        <div [ngClass]="{ 'bg-mag-300': button.activo, 'bg-white': !button.activo , 'text-white': button.activo}"
+            [pTooltip]="button.nombre" tooltipPosition="right" class="rounded-full flex py-2 px-3 shadow-md mb-8 cursor-pointer
             transition-all duration-300 hover:bg-mag-300 hover:text-white" (click)="navigate(button)">
             <i class="pi {{ button.icono }} text-3xl"></i>
         </div>

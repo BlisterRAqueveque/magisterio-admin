@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login.component';
 import { HomeComponent } from './features/home/home.component';
+import { UsuariosComponent } from './features/home/pages/usuarios/usuarios.component';
+import { CasasMutualesComponent } from './features/home/pages/casas-mutuales/casas-mutuales.component';
 
 export const routes: Routes = [
   {
@@ -17,5 +19,15 @@ export const routes: Routes = [
     path: 'home',
     title: 'Bienvenido',
     component: HomeComponent,
+    children: [
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+      },
+      {
+        path: 'casas-mutuales',
+        component: CasasMutualesComponent,
+      },
+    ],
   },
 ];

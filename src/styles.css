@@ -62,3 +62,30 @@ button .ripple {
   }
 }
 /* End ripple button effects */
+
+/* Estilos de las tablas */
+td {
+  white-space: nowrap;
+}
+
+th > p {
+  white-space: nowrap;
+  max-width: 120px;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  margin: 2px 0;
+}
+
+.item {
+  transition: all 300ms;
+}
+
+.item:hover {
+  background: rgb(251, 206, 7, 0.556);
+  cursor: pointer;
+}
+/* Fin estilos de las tablas */
+
+.p-sidebar-header {
+  justify-content: space-between;
+}

@@ -16,19 +16,20 @@ export class SidebarComponent {
     {
       nombre: 'Usuarios',
       activo: false,
-      link: '',
+      link: 'usuarios',
       icono: 'pi-user',
     },
     {
       nombre: 'Casas mutuales',
       activo: false,
-      link: '',
+      link: 'casas-mutuales',
       icono: 'pi-building-columns',
     },
   ];
 
   ngOnInit() {
     this.buttons[0].activo = true;
+    this.navigate(this.buttons[0]);
   }
 
   private readonly router = inject(Router);
@@ -37,7 +38,7 @@ export class SidebarComponent {
     this.buttons.map((b) => (b.activo = false));
     object.activo = true;
     this.showSideBar = false;
-    //this.router.navigate([object.link]);
+    this.router.navigate([`/home/${object.link}`]);
   }
 
   showSideBar = false;

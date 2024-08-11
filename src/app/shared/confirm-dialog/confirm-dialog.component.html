@@ -1,5 +1,5 @@
 <div @fadeInOut class="flex justify-center items-center fixed top-0 left-0 w-screen h-screen
-    z-50 transition-all duration-100" id="backdrop">
+    z-[5000] transition-all duration-100" id="backdrop">
 
     <div class="flex flex-col items-center px-16 pt-16 rounded-2xl bg-white relative max-w-full z-50">
         <div class="rounded-full bg-mag-800 inline-flex justify-center items-center h-32 w-32 -mt-8 absolute -top-8">
@@ -10,19 +10,20 @@
         <p class="mb-0 w-full break-words">{{ message }}</p>
         @if(haveConfirmButton) {
         <div class="flex items-center justify-between mt-4 w-full">
-            <button class="bg-mag-950 text-white rounded-md shadow-md p-3 m-3"
+            <button class="bg-mag-300 text-white rounded-md shadow-md p-3 m-3"
                 (click)="confirmAction()">Aceptar</button>
-            <button class="bg-red-950 text-white rounded-md shadow-md p-3 m-3 cancel"
+            <button class="bg-red-500 text-white rounded-md shadow-md p-3 m-3 cancel"
                 (click)="close()">Cancelar</button>
         </div>
         }
         @else {
         <div class="flex items-center justify-end mt-4 w-full">
-            <button class="bg-mag-950 text-white rounded-md shadow-md p-3 m-3" (click)="close()">Aceptar</button>
+            <button class="bg-mag-950 text-white rounded-md shadow-md p-3 m-3"
+                (click)="confirmAction()">Aceptar</button>
         </div>
         }
     </div>
     <!-- Backdrop close the dialog -->
-    <div class=" flex-1 w-screen h-screen bg-black/60 backdrop-blur-sm fixed" (click)="close()">
+    <div class=" flex-1 w-screen h-screen bg-black/60 backdrop-blur-sm fixed">
     </div>
 </div>

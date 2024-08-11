@@ -1,3 +1,7 @@
+import { CasaMutualI } from '../../home/models/casa.mutual';
+import { EdicionI } from '../../home/models/ediciones';
+import { ReservaI } from '../../home/models/reservas';
+
 export interface LoginResponse {
   token: {
     token: string;
@@ -17,12 +21,16 @@ export interface UsuarioI {
   clave: string;
   fecha_creado: Date;
   primer_login: Date;
+  activo: boolean;
+  borrado_el: Date;
 
-  //casa_mutual: CasaMutualI[];
+  carga_casa_mutual: CasaMutualI[];
 
-  //reservas_aprovadas: ReservaI[];
+  casa_mutual: CasaMutualI[];
 
-  //ediciones: EdicionI[];
+  reservas_aprovadas: ReservaI[];
+
+  ediciones: EdicionI[];
 
   creado_por: UsuarioI;
 

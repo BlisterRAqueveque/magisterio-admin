@@ -1,0 +1,28 @@
+<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [draggable]="false"
+    [style]="{ 'min-width': '50%' }">
+    <ng-template pTemplate="header">
+        <h4 class="text-2xl">Crear nuevo usuario</h4>
+    </ng-template>
+    <div class="pt-7">
+        <m-input label="ID" type="number" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese usuario" type="text" label="Usuario" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese correo" label="Correo electrónico" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese nombre" label="Nombre" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-input placeholder="Ingrese apellido" label="Apellido" type="email" />
+    </div>
+    <div class="pt-7">
+        <m-select />
+    </div>
+    <ng-template pTemplate="footer">
+        <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2">Crear</button>
+    </ng-template>
+</p-dialog>
