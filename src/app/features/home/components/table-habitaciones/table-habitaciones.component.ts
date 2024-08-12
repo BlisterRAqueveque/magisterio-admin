@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
@@ -12,48 +12,52 @@ import { AddButtonComponent } from '../../../../shared/add-button/add-button.com
 import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { InputComponent } from '../../../../shared/input/input.component';
 import { LoaderService } from '../../../../shared/loader/loader.service';
-import { SelectComponent } from '../../../../shared/select/select.component';
+import { PresentModal } from '../../../../shared/modal/present-modal.component';
 import { UsuarioI } from '../../../login/models/usuario';
 import { CasaMutualI } from '../../models/casa.mutual';
-import { UsuariosService } from '../../service/usuarios.service';
+import { HabitacionI } from '../../models/habitaciones';
+import { HabitacionesService } from '../../service/habitaciones.service';
+import { DropdownModule } from 'primeng/dropdown';
 import { CasasMutualesService } from '../../service/casas.mutuales.service';
-import { RippleModule } from 'primeng/ripple';
-import { PresentModal } from '../../../../shared/modal/present-modal.component';
+import {
+  AutoCompleteCompleteEvent,
+  AutoCompleteModule,
+} from 'primeng/autocomplete';
 
 @Component({
-  selector: 'm-table-usuarios',
+  selector: 'm-table-habitaciones',
   standalone: true,
   imports: [
     TableModule,
     PaginatorModule,
     CommonModule,
+    AddButtonComponent,
+    DialogModule,
+    InputComponent,
+    ConfirmDialogModule,
     TooltipModule,
     SidebarModule,
-    InputComponent,
-    DialogModule,
-    SelectComponent,
-    AddButtonComponent,
-    MultiSelectModule,
-    RippleModule,
     PresentModal,
+    DropdownModule,
+    AutoCompleteModule,
   ],
-  templateUrl: './table-usuarios.component.html',
-  styleUrl: './table-usuarios.component.css',
+  templateUrl: './table-habitaciones.component.html',
+  styleUrl: './table-habitaciones.component.css',
 })
-export class TableUsuariosComponent {
-  private readonly service = inject(UsuariosService);
+export class TableHabitacionesComponent {
+  private readonly service = inject(HabitacionesService);
   private readonly auth = inject(AuthService);
-  private readonly casasService = inject(CasasMutualesService);
+  private readonly casaService = inject(CasasMutualesService);
 
   usuario!: UsuarioI | null;
 
   visible = false;
 
-  usuarios: UsuarioI[] = [];
-  usuarios_deletes: UsuarioI[] = [];
+  habitaciones: HabitacionI[] = [];
+  habitaciones_deletes: HabitacionI[] = [];
 
   casas_mutuales: CasaMutualI[] = [];
-  selected_casas: CasaMutualI[] = [];
+  //selected_casa!: CasaMutualI;
 
   params = new HttpParams();
 
@@ -64,12 +68,13 @@ export class TableUsuariosComponent {
     this.params = this.params.set('sortBy', 'DESC');
     this.getHistoric();
 
-    this.casasService.getAll().subscribe((data) => {
+    /** Obtenemos las casas mutuales */
+    this.casaService.getAll().subscribe((data) => {
       this.casas_mutuales = data.result;
     });
-
+    /** Obtenemos los registros eliminados */
     this.service.getDeletes().subscribe((data) => {
-      this.usuarios_deletes = data;
+      this.habitaciones_deletes = data;
     });
   }
 
@@ -81,9 +86,9 @@ export class TableUsuariosComponent {
   async getHistoric() {
     this.table.loading = true;
 
-    this.service.getAllUsers(this.params).subscribe({
+    this.service.getAll(this.params).subscribe({
       next: (data) => {
-        this.usuarios = data.result;
+        this.habitaciones = data.result;
         this.totalRecords = data.count;
         this.table.loading = false;
       },
@@ -130,28 +135,32 @@ export class TableUsuariosComponent {
     }
   }
 
-  printCasaMutual(casas_mutual: CasaMutualI[]) {
-    const casas = casas_mutual.map((a) => a.nombre).join(', ');
-    return casas;
+  returnMapData(data: string[]) {
+    return data.join(', ');
   }
 
+  //! AUTOCOMPLETE METHODS -------------------------------------------------------------->
+  suggestions: string[] = [];
+  search(event: AutoCompleteCompleteEvent) {
+    this.suggestions = [event.query];
+  }
+  //! AUTOCOMPLETE METHODS -------------------------------------------------------------->
+
   //! DIALOG METHODS -------------------------------------------------------------------->
-  selectedUsuario: UsuarioI | undefined;
+  habitacion: HabitacionI | undefined;
   otherAction = false;
-  onRowSelect(item: UsuarioI) {
+  onRowSelect(item: any) {
     if (!this.otherAction) {
       this.visible = true;
-      this.selectedUsuario = item;
-      if (this.selectedUsuario) {
-        this._usuario = this.selectedUsuario.usuario;
-        this.correo = this.selectedUsuario.correo;
-        this.nombre = this.selectedUsuario.nombre;
-        this.apellido = this.selectedUsuario.apellido;
-        this.activo = this.selectedUsuario.activo;
-        this.selected_casas = this.casas_mutuales.filter((c) =>
-          this.selectedUsuario?.casa_mutual.find((cu) => cu.id === c.id)
+      this.habitacion = item;
+      if (this.habitacion) {
+        this.nombre = this.habitacion.nombre;
+        this.servicios = this.habitacion.servicios;
+        this.casa_mutual = this.casas_mutuales.find(
+          (c) => c.id === this.habitacion?.casa_mutual.id
         );
-        this.selectedUsuario.ediciones.forEach((e) => {
+        this.activo = this.habitacion.activo;
+        this.habitacion.ediciones.forEach((e) => {
           if (e.descripcion.includes(' | antes: ')) {
             const jsonData = e.descripcion.split(' | antes: ');
             e.descripcion = jsonData[0];
@@ -164,32 +173,29 @@ export class TableUsuariosComponent {
   }
 
   resetValues() {
-    this.selectedUsuario = undefined;
-    this._usuario = undefined;
-    this.correo = undefined;
+    this.habitacion = undefined;
     this.nombre = undefined;
-    this.apellido = undefined;
-    this.selected_casas = [];
+    this.servicios = undefined;
     this.activo = undefined;
+    this.casa_mutual = undefined;
   }
   //! DIALOG METHODS -------------------------------------------------------------------->
 
   //! UPLOAD METHODS --------------------------------------------------------------------->
-  _usuario!: string | undefined;
-  correo!: string | undefined;
-  nombre!: string | undefined;
-  apellido!: string | undefined;
+  nombre: string | undefined;
+  servicios: string[] | undefined;
+  casa_mutual: CasaMutualI | undefined;
   activo: boolean | undefined;
 
   private readonly dialog = inject(DialogService);
   private readonly loader = inject(LoaderService);
   error = false;
   save() {
-    if (this.usuario && this.correo) {
+    if (this.nombre) {
       this.error = false;
       this.dialog.present(
         'Confirmación de carga',
-        '¿Está seguro/a de dar de alta el siguiente usuario?',
+        '¿Está seguro/a de dar de alta la siguiente habitación?',
         () => {
           this.loader.present();
           this.onSave();
@@ -200,12 +206,10 @@ export class TableUsuariosComponent {
     }
   }
   onSave() {
-    const newUsuario: Partial<UsuarioI> = {
-      usuario: this._usuario,
-      correo: this.correo,
-      nombre: this.nombre,
-      apellido: this.apellido,
-      casa_mutual: this.selected_casas,
+    const newHabitacion: Partial<HabitacionI> = {
+      nombre: this.nombre!,
+      servicios: this.servicios!,
+      casa_mutual: this.casa_mutual,
       ediciones: [
         {
           descripcion: `Creado por: ${this.usuario?.nombre_completo}`,
@@ -214,9 +218,9 @@ export class TableUsuariosComponent {
       ],
       creado_por: this.usuario!,
     };
-    this.service.save(newUsuario).subscribe({
+    this.service.save(newHabitacion).subscribe({
       next: (data) => {
-        this.usuarios.push(data);
+        this.habitaciones.push(data);
         this.loader.dismiss();
         setTimeout(() => {
           this.dialog.confirmAction(
@@ -231,25 +235,13 @@ export class TableUsuariosComponent {
       error: (e) => {
         console.error(e);
         this.loader.dismiss();
-        if (e.error ? e.error.statusCode === 409 : false) {
-          setTimeout(() => {
-            this.dialog.error(
-              'Error de carga',
-              'Ya existe un registro con ese usuario o correo.',
-              () => {
-                this.error = true;
-              }
-            );
-          }, 100);
-        } else {
-          setTimeout(() => {
-            this.dialog.error(
-              'Error de carga',
-              'Ocurrió un error durante la carga.',
-              () => {}
-            );
-          }, 100);
-        }
+        setTimeout(() => {
+          this.dialog.error(
+            'Error de carga',
+            'Ocurrió un error durante la carga.',
+            () => {}
+          );
+        }, 100);
       },
     });
   }
@@ -259,7 +251,7 @@ export class TableUsuariosComponent {
   edit() {
     this.dialog.present(
       'Confirmación de carga',
-      '¿Está seguro/a de modificar el siguiente usuario?',
+      '¿Está seguro/a de modificar la siguiente habitación?',
       () => {
         this.loader.present();
         this.onEdit();
@@ -267,28 +259,26 @@ export class TableUsuariosComponent {
     );
   }
   onEdit() {
-    const { ediciones, ...oldUsuario } = this.selectedUsuario!;
-    const editUsuario: Partial<UsuarioI> = {
-      id: this.selectedUsuario?.id,
-      usuario: this._usuario,
-      correo: this.correo,
-      nombre: this.nombre,
-      apellido: this.apellido,
-      nombre_completo: `${this.nombre} ${this.apellido}`,
-      casa_mutual: this.selected_casas,
+    const { ediciones, ...oldHabitacion } = this.habitacion!;
+    const editHabitacion: Partial<HabitacionI> = {
+      id: this.habitacion?.id,
+      nombre: this.nombre!,
+      servicios: this.servicios!,
+      casa_mutual: this.casa_mutual,
       ediciones: [
         {
           descripcion: `Editado por: ${
             this.usuario?.nombre_completo
-          } | antes: ${JSON.stringify(oldUsuario)}`,
+          } | antes: ${JSON.stringify(oldHabitacion)}`,
           fecha_editado: new Date(),
         },
       ],
     };
-    this.service.update(editUsuario).subscribe({
+    this.service.update(editHabitacion).subscribe({
       next: (data) => {
-        const a = this.usuarios.find((c) => c.id === data.id);
+        const a = this.habitaciones.find((c) => c.id === data.id);
         if (a) Object.assign(a, data);
+        this.habitacion = data;
         this.loader.dismiss();
         setTimeout(() => {
           this.dialog.confirmAction(
@@ -330,7 +320,7 @@ export class TableUsuariosComponent {
     this.dialog.present(
       'Confirmación de carga',
       `¿Está seguro/a de ${activo ? 'desactivar' : 'activar'} este registro?\n
-        Tenga en cuenta que dependiendo del estado, este se muestra en las aplicaciones o no.`,
+      Tenga en cuenta que dependiendo del estado, este se muestra en las aplicaciones o no.`,
       () => {
         this.onChangeState(activo, id);
       }
@@ -338,7 +328,7 @@ export class TableUsuariosComponent {
   }
   onChangeState(activo: boolean, id: number) {
     this.loader.present();
-    const editCasa: Partial<UsuarioI> = {
+    const editHabitacion: Partial<HabitacionI> = {
       id,
       activo: !activo,
       ediciones: [
@@ -350,9 +340,9 @@ export class TableUsuariosComponent {
         },
       ],
     };
-    this.service.update(editCasa).subscribe({
+    this.service.update(editHabitacion).subscribe({
       next: (data) => {
-        const a = this.usuarios.find((c) => c.id === data.id);
+        const a = this.habitaciones.find((c) => c.id === data.id);
         if (a) Object.assign(a, data);
         this.loader.dismiss();
         setTimeout(() => {
@@ -393,24 +383,28 @@ export class TableUsuariosComponent {
   //! ACTIVATE METHODS ------------------------------------------------------------------->
 
   //! DELETE METHODS --------------------------------------------------------------------->
-  softDelete(usuario: UsuarioI) {
+  softDelete(habitacion: HabitacionI) {
     this.dialog.present(
       '¡Precaución!',
       `¿Está seguro/a de eliminar este registro?\n
       Tenga en cuenta que no se perderán los datos, pero el registro no se podrá recuperar para seguir utilizándose.`,
       () => {
-        this.onSoftDelete(usuario);
+        this.onSoftDelete(habitacion);
       }
     );
   }
-  onSoftDelete(usuario: UsuarioI) {
+  onSoftDelete(habitacion: HabitacionI) {
     this.loader.present();
-    this.service.softDelete(usuario).subscribe({
+    this.service.softDelete(habitacion).subscribe({
       next: (data) => {
         this.loader.dismiss();
-        const usuarioDelete = this.usuarios.find((u) => u.id === usuario.id);
-        if (usuarioDelete) this.usuarios_deletes.push(usuarioDelete);
-        this.usuarios = this.usuarios.filter((c) => c.id !== usuario.id);
+        const casaDelete = this.habitaciones.find(
+          (c) => c.id === habitacion.id
+        );
+        if (casaDelete) this.habitaciones_deletes.push(casaDelete);
+        this.habitaciones = this.habitaciones.filter(
+          (c) => c.id !== habitacion.id
+        );
         setTimeout(() => {
           this.dialog.confirmAction(
             'Confirmación de carga',
@@ -446,20 +440,20 @@ export class TableUsuariosComponent {
   }
 
   sidebarVisible = false;
-  restore(usuario: UsuarioI) {
+  restore(habitacion: HabitacionI) {
     this.dialog.present(
       '¡Precaución!',
       `¿Está seguro/a de restaurar este registro?\n
       Tenga en cuenta que los datos relacionados también se restauraran.`,
       () => {
-        this.onRestore(usuario);
+        this.onRestore(habitacion);
       }
     );
   }
-  onRestore(usuario: UsuarioI) {
+  onRestore(habitacion: HabitacionI) {
     this.loader.present();
-    const restoreUsuario: Partial<UsuarioI> = {
-      id: usuario.id,
+    const restoreCasa: Partial<HabitacionI> = {
+      id: habitacion.id,
       ediciones: [
         {
           descripcion: `Restaurado por: ${this.usuario?.nombre_completo}`,
@@ -467,13 +461,13 @@ export class TableUsuariosComponent {
         },
       ],
     };
-    this.service.restore(restoreUsuario).subscribe({
+    this.service.restore(restoreCasa).subscribe({
       next: (data) => {
         this.loader.dismiss();
-        this.usuarios_deletes = this.usuarios.filter(
-          (c) => c.id !== usuario.id
+        this.habitaciones_deletes = this.habitaciones.filter(
+          (c) => c.id !== habitacion.id
         );
-        this.usuarios.unshift(data);
+        this.habitaciones.unshift(data);
         setTimeout(() => {
           this.dialog.confirmAction(
             'Confirmación de carga',
@@ -509,5 +503,5 @@ export class TableUsuariosComponent {
   }
   //! DELETE METHODS --------------------------------------------------------------------->
 
-  userOld: UsuarioI | undefined;
+  habitacionOld: HabitacionI | undefined;
 }

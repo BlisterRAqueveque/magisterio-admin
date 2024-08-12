@@ -90,6 +90,18 @@ th > p {
   justify-content: space-between;
 }
 
-.p-multiselect {
+.p-multiselect,
+.p-dropdown {
   border: #ffe485 solid 1px;
+}
+
+.p-autocomplete-multiple-container {
+  border: #ffe485 solid 1px;
+  border-radius: 6px;
+  padding: 0.5rem;
+  width: 100% !important;
+}
+
+.p-autocomplete {
+  width: 100% !important;
 }

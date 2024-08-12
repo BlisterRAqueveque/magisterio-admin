@@ -3,6 +3,7 @@ import { LoginComponent } from './features/login/login.component';
 import { HomeComponent } from './features/home/home.component';
 import { UsuariosComponent } from './features/home/pages/usuarios/usuarios.component';
 import { CasasMutualesComponent } from './features/home/pages/casas-mutuales/casas-mutuales.component';
+import { HabitacionesComponent } from './features/home/pages/habitaciones/habitaciones.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,10 @@ export const routes: Routes = [
       {
         path: 'casas-mutuales',
         component: CasasMutualesComponent,
+      },
+      {
+        path: 'habitaciones',
+        component: HabitacionesComponent,
       },
     ],
   },

@@ -53,7 +53,7 @@ export class TableCasasComponent {
   async ngAfterViewInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.params = this.params.set('page', 1);
-    this.params = this.params.set('perPage', 10);
+    this.params = this.params.set('perPage', 5);
     this.params = this.params.set('sortBy', 'DESC');
     this.getHistoric();
 

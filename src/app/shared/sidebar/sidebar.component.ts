@@ -25,6 +25,12 @@ export class SidebarComponent {
       link: 'casas-mutuales',
       icono: 'pi-building-columns',
     },
+    {
+      nombre: 'Habitaciones',
+      activo: false,
+      link: 'habitaciones',
+      icono: 'pi-home',
+    },
   ];
 
   ngOnInit() {
