@@ -21,7 +21,7 @@ export interface CasaMutualI {
   usuarios: UsuarioI[];
   habitaciones: HabitacionI[];
   parcelas: ParcelaI[];
-  horarios: HorarioI[];
+  horarios: HorarioI | null;
 
   ediciones: EdicionI[];
 }

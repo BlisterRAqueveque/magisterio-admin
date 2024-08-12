@@ -34,8 +34,8 @@ export class SidebarComponent {
   ];
 
   ngOnInit() {
-    this.buttons[0].activo = true;
-    this.navigate(this.buttons[0]);
+    this.buttons[1].activo = true;
+    this.navigate(this.buttons[1]);
   }
 
   private readonly router = inject(Router);

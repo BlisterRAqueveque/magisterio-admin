@@ -17,6 +17,8 @@ import { CasasMutualesService } from '../../service/casas.mutuales.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { SidebarModule } from 'primeng/sidebar';
 import { PresentModal } from '../../../../shared/modal/present-modal.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { months } from '../../models/months';
 
 @Component({
   selector: 'm-table-casas',
@@ -33,6 +35,7 @@ import { PresentModal } from '../../../../shared/modal/present-modal.component';
     TooltipModule,
     SidebarModule,
     PresentModal,
+    SelectComponent,
   ],
   templateUrl: './table-casas.component.html',
   styleUrl: './table-casas.component.css',
@@ -60,6 +63,10 @@ export class TableCasasComponent {
     this.service.getDeletes().subscribe((data) => {
       this.casas_mutuales_deletes = data;
     });
+
+    for (let i = 1; i <= 31; i++) {
+      this.days.push({ id: i, day: i < 10 ? `0${i}` : `${i}` });
+    }
   }
 
   totalRecords = 0;
@@ -120,6 +127,10 @@ export class TableCasasComponent {
   }
 
   //! DIALOG METHODS -------------------------------------------------------------------->
+  @ViewChild('dInicio') dInicio!: SelectComponent;
+  @ViewChild('mInicio') mInicio!: SelectComponent;
+  @ViewChild('dFin') dFin!: SelectComponent;
+  @ViewChild('mFin') mFin!: SelectComponent;
   casa: CasaMutualI | undefined;
   otherAction = false;
   onRowSelect(item: any) {
@@ -135,6 +146,27 @@ export class TableCasasComponent {
         this.cp = this.casa.cp;
         this.co = this.casa.co;
         this.activo = this.casa.activo;
+        if (this.casa.horarios) {
+          this.show = true;
+          //* Inicio periodo
+          this.inicio = new Date(this.casa.horarios.inicio_periodo);
+          const dInicio = this.inicio.getDate();
+          const mInicio = this.inicio.getMonth() + 1;
+          this.diaInicio = this.days.find((d) => d.id === dInicio);
+          this.dInicio.value = dInicio.toString();
+          this.mesInicio = this.months.find((m) => m.id === mInicio);
+          this.mInicio.value = mInicio.toString();
+
+          //* Fin periodo
+          this.fin = new Date(this.casa.horarios.fin_periodo);
+          const dFin = this.fin.getDate();
+          const mFin = this.fin.getMonth() + 1;
+          this.diaFin = this.days.find((d) => d.id === dFin);
+          this.dFin.value = dFin.toString();
+          this.mesFin = this.months.find((m) => m.id === mFin);
+          this.mFin.value = mFin.toString();
+          console.log(this.diaFin,this.mesFin);
+        }
         this.casa.ediciones.forEach((e) => {
           if (e.descripcion.includes(' | antes: ')) {
             const jsonData = e.descripcion.split(' | antes: ');
@@ -147,7 +179,12 @@ export class TableCasasComponent {
     this.otherAction = false;
   }
 
-  resetValues() {
+  resetValues(
+    dFin: SelectComponent,
+    mFin: SelectComponent,
+    dInicio: SelectComponent,
+    mInicio: SelectComponent
+  ) {
     this.casa = undefined;
     this.nombre = undefined;
     this.direccion = undefined;
@@ -157,6 +194,21 @@ export class TableCasasComponent {
     this.cp = undefined;
     this.co = undefined;
     this.activo = undefined;
+
+    //! Periodo
+    this.diaInicio = undefined;
+    this.mesInicio = undefined;
+    this.diaFin = undefined;
+    this.mesFin = undefined;
+    this.inicio = undefined;
+    this.fin = undefined;
+    this.errorMessage = '';
+    this.errorPeriod = false;
+    this.show = false;
+    dInicio.deleteValue();
+    dFin.deleteValue();
+    mInicio.deleteValue();
+    mFin.deleteValue();
   }
   //! DIALOG METHODS -------------------------------------------------------------------->
 
@@ -174,7 +226,7 @@ export class TableCasasComponent {
   private readonly loader = inject(LoaderService);
   error = false;
   save() {
-    if (this.nombre) {
+    if (this.nombre && this.comprobarPeriodo()) {
       this.error = false;
       this.dialog.present(
         'Confirmación de carga',
@@ -200,7 +252,9 @@ export class TableCasasComponent {
       usuarios: [],
       habitaciones: [],
       parcelas: [],
-      horarios: [],
+      horarios: this.show
+        ? { inicio_periodo: this.inicio!, fin_periodo: this.fin! }
+        : null,
       ediciones: [
         {
           descripcion: `Creado por: ${this.usuario?.nombre_completo}`,
@@ -253,14 +307,16 @@ export class TableCasasComponent {
 
   //! UPDATE METHODS --------------------------------------------------------------------->
   edit() {
-    this.dialog.present(
-      'Confirmación de carga',
-      '¿Está seguro/a de modificar la siguiente casa mutual?',
-      () => {
-        this.loader.present();
-        this.onEdit();
-      }
-    );
+    if (this.comprobarPeriodo()) {
+      this.dialog.present(
+        'Confirmación de carga',
+        '¿Está seguro/a de modificar la siguiente casa mutual?',
+        () => {
+          this.loader.present();
+          this.onEdit();
+        }
+      );
+    }
   }
   onEdit() {
     const { ediciones, ...oldCasa } = this.casa!;
@@ -273,6 +329,9 @@ export class TableCasasComponent {
       cel: this.cel!,
       correo: this.correo!,
       cp: this.cp!,
+      horarios: this.show
+        ? { inicio_periodo: this.inicio!, fin_periodo: this.fin! }
+        : null,
       ediciones: [
         {
           descripcion: `Editado por: ${
@@ -511,4 +570,43 @@ export class TableCasasComponent {
   //! DELETE METHODS --------------------------------------------------------------------->
 
   casaOld: CasaMutualI | undefined;
+
+  show = false;
+
+  days: { id: number; day: string }[] = [];
+  months = months;
+
+  diaInicio!: any;
+  mesInicio!: any;
+  diaFin!: any;
+  mesFin!: any;
+  inicio!: Date | undefined;
+  fin!: Date | undefined;
+  errorMessage!: string;
+  errorPeriod = false;
+
+  comprobarPeriodo() {
+    if (this.show) {
+      this.errorPeriod = false;
+      this.errorMessage = '';
+      if (this.diaInicio && this.mesInicio && this.diaFin && this.mesFin) {
+        this.inicio = new Date(2024, this.mesInicio.id - 1, this.diaInicio.id);
+        this.fin = new Date(2024, this.mesFin.id - 1, this.diaFin.id);
+        if (this.inicio.getTime() < this.fin.getTime()) {
+          return true;
+        } else {
+          this.errorPeriod = true;
+          this.errorMessage = 'Los periodos son incorrectos';
+          return false;
+        }
+      } else {
+        this.errorPeriod = true;
+        this.errorMessage = 'Faltan completar los campos';
+        return false;
+      }
+    } else {
+      this.errorPeriod = false;
+      return true;
+    }
+  }
 }

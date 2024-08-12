@@ -1,7 +1,7 @@
 <div class="relative">
     <!--top-0-->
     <p class="absolute left-2 bottom-2 transition-all duration-300 pointer-events-none" [ngClass]="{ 'top-0': focus || value,
-      'top-[30px]': !focus && !value, 'left-2': !focus && !value, 'left-3': focus || value, 'text-base': !focus && !value,
+      'top-1/2 -translate-y-1/2': !focus && !value, 'left-2': !focus && !value, 'left-3': focus || value, 'text-base': !focus && !value,
       'text-sm': focus || value, 'text-gray-600': !focus && !value, 'text-black': focus || value }">
         {{ placeholder }}</p>
     <select name="select" (focus)="focus = true" (blur)="focus = false" [(ngModel)]="value" (ngModelChange)="getValue()"
@@ -15,6 +15,7 @@
         }
     </select>
     @if(value) {
-    <i class="pi pi-times top-[32px] text-xl right-6 absolute cursor-pointer" @fadeInOut (click)="deleteValue()"></i>
+    <i class="pi pi-times top-1/2 -translate-y-1/2 text-xl right-6 absolute cursor-pointer" @fadeInOut
+        (click)="deleteValue()"></i>
     }
 </div>
