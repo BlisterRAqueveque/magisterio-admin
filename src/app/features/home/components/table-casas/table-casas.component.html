@@ -172,11 +172,11 @@
                     <p class="pl-2"><b>Fin del periodo</b></p>
                     <div class="grid grid-cols-12 gap-4 mt-2">
                         <div class="col-span-4">
-                            <m-select [options]="days" optionLabel="day" optionValue="day" [(selectedValue)]="diaFin"
+                            <m-select [options]="days" optionLabel="id" optionValue="day" [(selectedValue)]="diaFin"
                                 placeholder="Día" #dFin />
                         </div>
                         <div class="col-span-6">
-                            <m-select [options]="months" optionLabel="nameES" optionValue="nameES"
+                            <m-select [options]="months" optionLabel="id" optionValue="nameES"
                                 [(selectedValue)]="mesFin" placeholder="Mes" #mFin />
                         </div>
                     </div>
