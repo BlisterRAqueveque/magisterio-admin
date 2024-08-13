@@ -74,9 +74,9 @@
         [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
         currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
 </div>
-<div class="w-full flex justify-end">
+<div class="w-full flex justify-start pl-10">
     <div class="center p-2 rounded-md bg-mag-400 cursor-pointer" pTooltip="Ver registros eliminados"
-        (click)="sidebarVisible = true" tooltipPosition="left">
+        (click)="sidebarVisible = true" tooltipPosition="right">
         <i class="pi pi-window-maximize"></i>
     </div>
 </div>
@@ -149,7 +149,7 @@
 
     <div class="flex justify-start items-center mt-2">
         <input id="periodo" type="checkbox" class="w-5 h-5 mr-2" [(ngModel)]="show">
-        <label for="periodo">Agregar un periodo</label>
+        <label for="periodo">Periodo activo</label>
     </div>
 
     <div class="hide mt-4" [ngClass]="{ show: show }">
@@ -304,5 +304,9 @@
         <p><b>Correo: </b>{{ casaOld?.correo }}</p>
         <p><b>Código postal: </b>{{ casaOld?.cp }}</p>
         <p><b>Activo: </b>{{ casaOld?.activo ? 'Activo' : 'Inactivo' }}</p>
+        <p><b>Periodo inicio:
+            </b>{{ casaOld?.horarios ? (casaOld?.horarios?.inicio_periodo | date: 'dd/MM') : 'No tiene' }}</p>
+        <p><b>Periodo fin: </b>{{ casaOld?.horarios ? (casaOld?.horarios?.fin_periodo | date: 'dd/MM') : 'No tiene' }}
+        </p>
     </ng-template>
 </m-modal>

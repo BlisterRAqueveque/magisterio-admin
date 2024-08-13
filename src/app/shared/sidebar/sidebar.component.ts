@@ -3,6 +3,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { Buttons } from './models/buttons';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'm-sidebar',
@@ -10,6 +11,14 @@ import { Router } from '@angular/router';
   imports: [TooltipModule, CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('400ms', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class SidebarComponent {
   buttons: Buttons[] = [
@@ -23,13 +32,19 @@ export class SidebarComponent {
       nombre: 'Casas mutuales',
       activo: false,
       link: 'casas-mutuales',
-      icono: 'pi-building-columns',
+      icono: 'pi-sitemap',
     },
     {
       nombre: 'Habitaciones',
       activo: false,
       link: 'habitaciones',
-      icono: 'pi-home',
+      icono: 'pi-key',
+    },
+    {
+      nombre: 'Parcelas',
+      activo: false,
+      link: 'parcelas',
+      icono: 'pi-map-marker',
     },
   ];
 
@@ -48,4 +63,6 @@ export class SidebarComponent {
   }
 
   showSideBar = false;
+
+  resize = false;
 }
