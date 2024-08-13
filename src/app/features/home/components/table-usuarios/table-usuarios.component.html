@@ -149,7 +149,7 @@
 <p-sidebar [(visible)]="sidebarVisible" [fullScreen]="true">
     <ng-template pTemplate="header">
         <span class="font-semibold text-xl">
-            Casas mutuales eliminadas
+            Usuarios eliminados
         </span>
     </ng-template>
     <p-table [value]="usuarios_deletes">
@@ -175,16 +175,16 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-casa>
+        <ng-template pTemplate="body" let-usuario>
             <tr>
-                <td>{{ casa.id }}</td>
-                <td>{{ casa.nombre }}</td>
-                <td>{{ casa.creado_por ? casa.creado_por.nombre_completo : 'Sin definir' }}</td>
-                <td>{{ casa.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
-                <td>{{ casa.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.creado_por ? usuario.creado_por.nombre_completo : 'Sin definir' }}</td>
+                <td>{{ usuario.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ usuario.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <div class="w-full flex justify-center items-center">
                     <!-- Restaurar -->
-                    <div pTooltip="Eliminar" tooltipPosition="left" (click)="otherAction = true; restore(casa)"
+                    <div pTooltip="Restaurar" tooltipPosition="left" (click)="otherAction = true; restore(usuario)"
                         class="bg-green-600 rounded-full px-2 py-1 cursor-pointer center">
                         <i class="pi pi-check-circle text-white text-xl"></i>
                     </div>

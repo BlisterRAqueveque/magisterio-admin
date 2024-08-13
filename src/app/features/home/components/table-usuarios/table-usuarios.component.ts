@@ -338,7 +338,7 @@ export class TableUsuariosComponent {
   }
   onChangeState(activo: boolean, id: number) {
     this.loader.present();
-    const editCasa: Partial<UsuarioI> = {
+    const editUsuario: Partial<UsuarioI> = {
       id,
       activo: !activo,
       ediciones: [
@@ -350,7 +350,7 @@ export class TableUsuariosComponent {
         },
       ],
     };
-    this.service.update(editCasa).subscribe({
+    this.service.update(editUsuario).subscribe({
       next: (data) => {
         const a = this.usuarios.find((c) => c.id === data.id);
         if (a) Object.assign(a, data);

@@ -1,23 +1,23 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
-import { CasaMutualI } from '../models/casa.mutual';
+import { ParcelaI } from '../models/parcelas';
 import { catchError, map } from 'rxjs';
 import { handleError } from '../../../core/tools';
 
 @Injectable({ providedIn: 'root' })
-export class CasasMutualesService {
+export class ParcelasService {
   private readonly http = inject(HttpClient);
   private readonly url = environment.url;
 
   //! GET METHOD
   getAll(params?: HttpParams) {
-    const direction = this.url + 'casas-mutuales';
+    const direction = this.url + 'parcelas';
     return this.http
       .get<{
         ok: boolean;
         result: {
-          result: CasaMutualI[];
+          result: ParcelaI[];
           count: number;
         };
         msg: string;
@@ -28,11 +28,11 @@ export class CasasMutualesService {
       );
   }
   getDeletes() {
-    const direction = this.url + 'casas-mutuales/entities/deletes';
+    const direction = this.url + 'parcelas/entities/deletes';
     return this.http
       .get<{
         ok: boolean;
-        result: CasaMutualI[];
+        result: ParcelaI[];
         msg: string;
       }>(direction)
       .pipe(
@@ -42,12 +42,12 @@ export class CasasMutualesService {
   }
 
   //! POST METHOD
-  save(data: Partial<CasaMutualI>) {
-    const direction = this.url + 'casas-mutuales';
+  save(data: Partial<ParcelaI>) {
+    const direction = this.url + 'parcelas';
     return this.http
       .post<{
         ok: boolean;
-        result: CasaMutualI;
+        result: ParcelaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -57,12 +57,12 @@ export class CasasMutualesService {
   }
 
   //! PUT METHOD
-  update(data: Partial<CasaMutualI>) {
-    const direction = this.url + 'casas-mutuales/' + data.id;
+  update(data: Partial<ParcelaI>) {
+    const direction = this.url + 'parcelas/' + data.id;
     return this.http
       .put<{
         ok: boolean;
-        result: CasaMutualI;
+        result: ParcelaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -71,12 +71,12 @@ export class CasasMutualesService {
       );
   }
 
-  restore(data: Partial<CasaMutualI>) {
-    const direction = this.url + 'casas-mutuales/entities/deletes/' + data.id;
+  restore(data: Partial<ParcelaI>) {
+    const direction = this.url + 'parcelas/entities/deletes/' + data.id;
     return this.http
       .put<{
         ok: boolean;
-        result: CasaMutualI;
+        result: ParcelaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -86,12 +86,12 @@ export class CasasMutualesService {
   }
 
   //! DELETE METHOD
-  softDelete(data: Partial<CasaMutualI>) {
-    const direction = this.url + 'casas-mutuales/' + data.id;
+  softDelete(data: Partial<ParcelaI>) {
+    const direction = this.url + 'parcelas/' + data.id;
     return this.http
       .delete<{
         ok: boolean;
-        result: CasaMutualI;
+        result: ParcelaI;
         msg: string;
       }>(direction)
       .pipe(

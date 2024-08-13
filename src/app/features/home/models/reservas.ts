@@ -1,5 +1,6 @@
 import { UsuarioI } from '../../login/models/usuario';
 import { DelegacionI } from './delegaciones';
+import { HabitacionI } from './habitaciones';
 
 export interface ReservaI {
   id: number;
@@ -20,4 +21,5 @@ export interface ReservaI {
   usuario_aprobador: UsuarioI;
 
   delegacion: DelegacionI;
+  habitacion: HabitacionI;
 }

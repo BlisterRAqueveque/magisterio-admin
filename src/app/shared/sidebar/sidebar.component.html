@@ -17,6 +17,7 @@
     </div>
 </div> -->
 
+<!-- Larger screen -->
 <div class="h-full transition-all duration-300 text-white lg:block md:block p-3 sm:hidden hidden"
     [ngClass]="{ 'w-24': resize, 'w-64': !resize }">
     <div class="relative h-full w-full bg-mag-950 rounded-xl shadow-md" [ngClass]="{ 'pl-3': !resize, 'p-0': resize }">
@@ -52,9 +53,35 @@
             </div>
         </div>
         }
+        @if(!resize) {
+        <!-- USER'S INFO -->
+        <div class="absolute bottom-0 left-0 w-full p-2" @fadeInOut>
+            <div class="bg-black/50 rounded-lg p-2">
+                <div class="relative">
+                    <p class="text-sm overflow-hidden w-[80%] whitespace-nowrap text-ellipsis">
+                        {{ usuario?.nombre_completo }}
+                    </p>
+                    <i class="pi pi-angle-down absolute right-0 top-1/2 -translate-y-1/2 transition-all duration-200 cursor-pointer"
+                        (click)="show = !show" [ngClass]="{ 'rotate-180': !show }"></i>
+                </div>
+                <div class="hide" [ngClass]="{ 'show': show }">
+                    <div class="text-sm">
+                        <hr class="my-2">
+                        <p><b>Casa/s mutual/es</b></p>
+                        <hr class="my-2">
+                        @for (casa of usuario?.casa_mutual; track $index) {
+                        <p class="text-xs pl-2 whitespace-nowrap text-ellipsis mb-2">{{ casa.nombre }}</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
     </div>
 </div>
 
+
+<!-- Small screen -->
 <div class="w-0 h-screen transition-all duration-100 bg-mag-950 lg:hidden md:hidden"
     [ngClass]="{ 'w-[100vw]': showSideBar }">
     @if(showSideBar){

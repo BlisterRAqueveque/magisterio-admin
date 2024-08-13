@@ -1,6 +1,7 @@
 import { UsuarioI } from '../../login/models/usuario';
 import { CasaMutualI } from './casa.mutual';
 import { EdicionI } from './ediciones';
+import { ReservaI } from './reservas';
 
 export interface HabitacionI {
   id: number;
@@ -13,4 +14,5 @@ export interface HabitacionI {
   casa_mutual: CasaMutualI;
   creado_por: UsuarioI;
   ediciones: EdicionI[];
+  reservas: ReservaI[];
 }

@@ -94,7 +94,7 @@
     (onHide)="resetValues()" [closeOnEscape]="false">
     <!-- HEADER -->
     <ng-template pTemplate="header">
-        <h4 class="text-2xl">{{ !habitacion ? 'Crear nueva casa mutual' : 'Modificar casa mutual'}}</h4>
+        <h4 class="text-2xl">{{ !habitacion ? 'Crear nueva habitación' : 'Modificar habitación'}}</h4>
     </ng-template>
 
     <!-- BODY -->
@@ -115,9 +115,9 @@
         </div>
         <div class="col-span-12">
             <div class="pt-3">
-                <p-autoComplete appendTo="body" [(ngModel)]="servicios"
-                    [suggestions]="suggestions" placeholder="Ingrese un valor, y seleccione la opción desplegable"
-                    (completeMethod)="search($event)" [multiple]="true" />
+                <p-autoComplete appendTo="body" [(ngModel)]="servicios" [suggestions]="suggestions"
+                    placeholder="Ingrese un valor, y seleccione la opción desplegable" (completeMethod)="search($event)"
+                    [multiple]="true" />
             </div>
         </div>
         <div class="col-span-12">
@@ -147,7 +147,7 @@
 <p-sidebar [(visible)]="sidebarVisible" [fullScreen]="true">
     <ng-template pTemplate="header">
         <span class="font-semibold text-xl">
-            Casas mutuales eliminadas
+            Habitaciones eliminadas
         </span>
     </ng-template>
     <p-table [value]="habitaciones_deletes">
@@ -182,7 +182,7 @@
                 <td>{{ habitacion.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <div class="w-full flex justify-center items-center">
                     <!-- Restaurar -->
-                    <div pTooltip="Eliminar" tooltipPosition="left" (click)="otherAction = true; restore(habitacion)"
+                    <div pTooltip="Restaurar" tooltipPosition="left" (click)="otherAction = true; restore(habitacion)"
                         class="bg-green-600 rounded-full px-2 py-1 cursor-pointer center">
                         <i class="pi pi-check-circle text-white text-xl"></i>
                     </div>

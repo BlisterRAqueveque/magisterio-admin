@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
-import {
-  AutoCompleteCompleteEvent,
-  AutoCompleteModule,
-} from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { Paginator, PaginatorModule } from 'primeng/paginator';
@@ -13,18 +9,18 @@ import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../../core/auth.service';
 import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { InputComponent } from '../../../../shared/input/input.component';
-import { LoaderService } from '../../../../shared/loader/loader.service';
 import { PresentModal } from '../../../../shared/modal/present-modal.component';
 import { UsuarioI } from '../../../login/models/usuario';
 import { CasaMutualI } from '../../models/casa.mutual';
-import { HabitacionI } from '../../models/habitaciones';
+import { ParcelaI } from '../../models/parcelas';
 import { CasasMutualesService } from '../../service/casas.mutuales.service';
-import { HabitacionesService } from '../../service/habitaciones.service';
+import { ParcelasService } from '../../service/parcelas.service';
+import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
+import { LoaderService } from '../../../../shared/loader/loader.service';
 
 @Component({
-  selector: 'm-table-habitaciones',
+  selector: 'm-table-parcelas',
   standalone: true,
   imports: [
     TableModule,
@@ -37,13 +33,12 @@ import { HabitacionesService } from '../../service/habitaciones.service';
     SidebarModule,
     PresentModal,
     DropdownModule,
-    AutoCompleteModule,
   ],
-  templateUrl: './table-habitaciones.component.html',
-  styleUrl: './table-habitaciones.component.css',
+  templateUrl: './table-parcelas.component.html',
+  styleUrl: './table-parcelas.component.css',
 })
-export class TableHabitacionesComponent {
-  private readonly service = inject(HabitacionesService);
+export class TableParcelasComponent {
+  private readonly service = inject(ParcelasService);
   private readonly auth = inject(AuthService);
   private readonly casaService = inject(CasasMutualesService);
 
@@ -51,11 +46,10 @@ export class TableHabitacionesComponent {
 
   visible = false;
 
-  habitaciones: HabitacionI[] = [];
-  habitaciones_deletes: HabitacionI[] = [];
+  parcelas: ParcelaI[] = [];
+  parcelas_deletes: ParcelaI[] = [];
 
   casas_mutuales: CasaMutualI[] = [];
-  //selected_casa!: CasaMutualI;
 
   params = new HttpParams();
 
@@ -72,7 +66,7 @@ export class TableHabitacionesComponent {
     });
     /** Obtenemos los registros eliminados */
     this.service.getDeletes().subscribe((data) => {
-      this.habitaciones_deletes = data;
+      this.parcelas_deletes = data;
     });
   }
 
@@ -86,7 +80,7 @@ export class TableHabitacionesComponent {
 
     this.service.getAll(this.params).subscribe({
       next: (data) => {
-        this.habitaciones = data.result;
+        this.parcelas = data.result;
         this.totalRecords = data.count;
         this.table.loading = false;
       },
@@ -133,32 +127,20 @@ export class TableHabitacionesComponent {
     }
   }
 
-  returnMapData(data: string[]) {
-    return data.join(', ');
-  }
-
-  //! AUTOCOMPLETE METHODS -------------------------------------------------------------->
-  suggestions: string[] = [];
-  search(event: AutoCompleteCompleteEvent) {
-    this.suggestions = [event.query];
-  }
-  //! AUTOCOMPLETE METHODS -------------------------------------------------------------->
-
   //! DIALOG METHODS -------------------------------------------------------------------->
-  habitacion: HabitacionI | undefined;
+  parcela: ParcelaI | undefined;
   otherAction = false;
-  onRowSelect(item: any) {
+  onRowSelect(item: ParcelaI) {
     if (!this.otherAction) {
       this.visible = true;
-      this.habitacion = item;
-      if (this.habitacion) {
-        this.nombre = this.habitacion.nombre;
-        this.servicios = this.habitacion.servicios;
+      this.parcela = item;
+      if (this.parcela) {
+        this.nombre = this.parcela.nombre;
         this.casa_mutual = this.casas_mutuales.find(
-          (c) => c.id === this.habitacion?.casa_mutual.id
+          (c) => c.id === this.parcela?.casa_mutual.id
         );
-        this.activo = this.habitacion.activo;
-        this.habitacion.ediciones.forEach((e) => {
+        this.activo = this.parcela.activo;
+        this.parcela.ediciones.forEach((e) => {
           if (e.descripcion.includes(' | antes: ')) {
             const jsonData = e.descripcion.split(' | antes: ');
             e.descripcion = jsonData[0];
@@ -171,9 +153,8 @@ export class TableHabitacionesComponent {
   }
 
   resetValues() {
-    this.habitacion = undefined;
+    this.parcela = undefined;
     this.nombre = undefined;
-    this.servicios = undefined;
     this.activo = undefined;
     this.casa_mutual = undefined;
   }
@@ -181,7 +162,6 @@ export class TableHabitacionesComponent {
 
   //! UPLOAD METHODS --------------------------------------------------------------------->
   nombre: string | undefined;
-  servicios: string[] | undefined;
   casa_mutual: CasaMutualI | undefined;
   activo: boolean | undefined;
 
@@ -193,7 +173,7 @@ export class TableHabitacionesComponent {
       this.error = false;
       this.dialog.present(
         'Confirmación de carga',
-        '¿Está seguro/a de dar de alta la siguiente habitación?',
+        '¿Está seguro/a de dar de alta la siguiente parcela?',
         () => {
           this.loader.present();
           this.onSave();
@@ -204,9 +184,8 @@ export class TableHabitacionesComponent {
     }
   }
   onSave() {
-    const newHabitacion: Partial<HabitacionI> = {
+    const newParcela: Partial<ParcelaI> = {
       nombre: this.nombre!,
-      servicios: this.servicios!,
       casa_mutual: this.casa_mutual,
       ediciones: [
         {
@@ -216,9 +195,9 @@ export class TableHabitacionesComponent {
       ],
       creado_por: this.usuario!,
     };
-    this.service.save(newHabitacion).subscribe({
+    this.service.save(newParcela).subscribe({
       next: (data) => {
-        this.habitaciones.push(data);
+        this.parcelas.push(data);
         this.loader.dismiss();
         setTimeout(() => {
           this.dialog.confirmAction(
@@ -249,7 +228,7 @@ export class TableHabitacionesComponent {
   edit() {
     this.dialog.present(
       'Confirmación de carga',
-      '¿Está seguro/a de modificar la siguiente habitación?',
+      '¿Está seguro/a de modificar la siguiente parcela?',
       () => {
         this.loader.present();
         this.onEdit();
@@ -257,26 +236,25 @@ export class TableHabitacionesComponent {
     );
   }
   onEdit() {
-    const { ediciones, ...oldHabitacion } = this.habitacion!;
-    const editHabitacion: Partial<HabitacionI> = {
-      id: this.habitacion?.id,
+    const { ediciones, ...oldParcela } = this.parcela!;
+    const editParcela: Partial<ParcelaI> = {
+      id: this.parcela?.id,
       nombre: this.nombre!,
-      servicios: this.servicios!,
       casa_mutual: this.casa_mutual,
       ediciones: [
         {
           descripcion: `Editado por: ${
             this.usuario?.nombre_completo
-          } | antes: ${JSON.stringify(oldHabitacion)}`,
+          } | antes: ${JSON.stringify(oldParcela)}`,
           fecha_editado: new Date(),
         },
       ],
     };
-    this.service.update(editHabitacion).subscribe({
+    this.service.update(editParcela).subscribe({
       next: (data) => {
-        const a = this.habitaciones.find((c) => c.id === data.id);
+        const a = this.parcelas.find((c) => c.id === data.id);
         if (a) Object.assign(a, data);
-        this.habitacion = data;
+        this.parcela = data;
         this.loader.dismiss();
         setTimeout(() => {
           this.dialog.confirmAction(
@@ -326,7 +304,7 @@ export class TableHabitacionesComponent {
   }
   onChangeState(activo: boolean, id: number) {
     this.loader.present();
-    const editHabitacion: Partial<HabitacionI> = {
+    const editParcela: Partial<ParcelaI> = {
       id,
       activo: !activo,
       ediciones: [
@@ -338,9 +316,9 @@ export class TableHabitacionesComponent {
         },
       ],
     };
-    this.service.update(editHabitacion).subscribe({
+    this.service.update(editParcela).subscribe({
       next: (data) => {
-        const a = this.habitaciones.find((c) => c.id === data.id);
+        const a = this.parcelas.find((c) => c.id === data.id);
         if (a) Object.assign(a, data);
         this.loader.dismiss();
         setTimeout(() => {
@@ -381,28 +359,24 @@ export class TableHabitacionesComponent {
   //! ACTIVATE METHODS ------------------------------------------------------------------->
 
   //! DELETE METHODS --------------------------------------------------------------------->
-  softDelete(habitacion: HabitacionI) {
+  softDelete(parcela: ParcelaI) {
     this.dialog.present(
       '¡Precaución!',
       `¿Está seguro/a de eliminar este registro?\n
       Tenga en cuenta que no se perderán los datos, pero el registro no se podrá recuperar para seguir utilizándose.`,
       () => {
-        this.onSoftDelete(habitacion);
+        this.onSoftDelete(parcela);
       }
     );
   }
-  onSoftDelete(habitacion: HabitacionI) {
+  onSoftDelete(parcela: ParcelaI) {
     this.loader.present();
-    this.service.softDelete(habitacion).subscribe({
+    this.service.softDelete(parcela).subscribe({
       next: (data) => {
         this.loader.dismiss();
-        const habitacionDelete = this.habitaciones.find(
-          (c) => c.id === habitacion.id
-        );
-        if (habitacionDelete) this.habitaciones_deletes.push(habitacionDelete);
-        this.habitaciones = this.habitaciones.filter(
-          (c) => c.id !== habitacion.id
-        );
+        const parcelaDelete = this.parcelas.find((c) => c.id === parcela.id);
+        if (parcelaDelete) this.parcelas_deletes.push(parcelaDelete);
+        this.parcelas = this.parcelas.filter((c) => c.id !== parcela.id);
         setTimeout(() => {
           this.dialog.confirmAction(
             'Confirmación de carga',
@@ -438,20 +412,20 @@ export class TableHabitacionesComponent {
   }
 
   sidebarVisible = false;
-  restore(habitacion: HabitacionI) {
+  restore(parcela: ParcelaI) {
     this.dialog.present(
       '¡Precaución!',
       `¿Está seguro/a de restaurar este registro?\n
       Tenga en cuenta que los datos relacionados también se restauraran.`,
       () => {
-        this.onRestore(habitacion);
+        this.onRestore(parcela);
       }
     );
   }
-  onRestore(habitacion: HabitacionI) {
+  onRestore(parcela: ParcelaI) {
     this.loader.present();
-    const restoreHabitacion: Partial<HabitacionI> = {
-      id: habitacion.id,
+    const restoreParcela: Partial<ParcelaI> = {
+      id: parcela.id,
       ediciones: [
         {
           descripcion: `Restaurado por: ${this.usuario?.nombre_completo}`,
@@ -459,13 +433,13 @@ export class TableHabitacionesComponent {
         },
       ],
     };
-    this.service.restore(restoreHabitacion).subscribe({
+    this.service.restore(restoreParcela).subscribe({
       next: (data) => {
         this.loader.dismiss();
-        this.habitaciones_deletes = this.habitaciones.filter(
-          (c) => c.id !== habitacion.id
+        this.parcelas_deletes = this.parcelas.filter(
+          (c) => c.id !== parcela.id
         );
-        this.habitaciones.unshift(data);
+        this.parcelas.unshift(data);
         setTimeout(() => {
           this.dialog.confirmAction(
             'Confirmación de carga',
@@ -501,5 +475,5 @@ export class TableHabitacionesComponent {
   }
   //! DELETE METHODS --------------------------------------------------------------------->
 
-  habitacionOld: HabitacionI | undefined;
+  parcelaOld: ParcelaI | undefined;
 }

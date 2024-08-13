@@ -4,6 +4,8 @@ import { Buttons } from './models/buttons';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { UsuarioI } from '../../features/login/models/usuario';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'm-sidebar',
@@ -46,11 +48,21 @@ export class SidebarComponent {
       link: 'parcelas',
       icono: 'pi-map-marker',
     },
+    {
+      nombre: 'Reservas',
+      activo: false,
+      link: 'reservas',
+      icono: 'pi-calendar',
+    },
   ];
 
-  ngOnInit() {
-    this.buttons[1].activo = true;
-    this.navigate(this.buttons[1]);
+  private readonly auth = inject(AuthService);
+  usuario!: UsuarioI | null;
+
+  async ngOnInit() {
+    this.usuario = await this.auth.returnUserInfo();
+    this.buttons[0].activo = true;
+    this.navigate(this.buttons[0]);
   }
 
   private readonly router = inject(Router);
@@ -65,4 +77,6 @@ export class SidebarComponent {
   showSideBar = false;
 
   resize = false;
+
+  show = false;
 }
