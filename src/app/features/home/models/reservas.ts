@@ -13,9 +13,9 @@ export interface ReservaI {
   desde: Date;
   hasta: Date;
 
-  aprobado: boolean;
-
   fecha_creado: Date;
+  estado: number;
+
   fecha_aprobado: Date;
 
   usuario_aprobador: UsuarioI;

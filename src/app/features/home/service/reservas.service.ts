@@ -1,23 +1,23 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { ParcelaI } from '../models/parcelas';
+import { ReservaI } from '../models/reservas';
 import { catchError, map } from 'rxjs';
 import { handleError } from '../../../core/tools';
 
 @Injectable({ providedIn: 'root' })
-export class ParcelasService {
+export class ReservasService {
   private readonly http = inject(HttpClient);
   private readonly url = environment.url;
 
   //! GET METHOD
   getAll(params?: HttpParams) {
-    const direction = this.url + 'parcelas';
+    const direction = this.url + 'reservas';
     return this.http
       .get<{
         ok: boolean;
         result: {
-          result: ParcelaI[];
+          result: ReservaI[];
           count: number;
         };
         msg: string;
@@ -28,11 +28,11 @@ export class ParcelasService {
       );
   }
   getDeletes() {
-    const direction = this.url + 'parcelas/entities/deletes';
+    const direction = this.url + 'reservas/entities/deletes';
     return this.http
       .get<{
         ok: boolean;
-        result: ParcelaI[];
+        result: ReservaI[];
         msg: string;
       }>(direction)
       .pipe(
@@ -42,12 +42,12 @@ export class ParcelasService {
   }
 
   //! POST METHOD
-  save(data: Partial<ParcelaI>) {
-    const direction = this.url + 'parcelas';
+  save(data: Partial<ReservaI>) {
+    const direction = this.url + 'reservas';
     return this.http
       .post<{
         ok: boolean;
-        result: ParcelaI;
+        result: ReservaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -57,12 +57,12 @@ export class ParcelasService {
   }
 
   //! PUT METHOD
-  update(data: Partial<ParcelaI>) {
-    const direction = this.url + 'parcelas/' + data.id;
+  update(data: Partial<ReservaI>) {
+    const direction = this.url + 'reservas/' + data.id;
     return this.http
       .put<{
         ok: boolean;
-        result: ParcelaI;
+        result: ReservaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -71,12 +71,12 @@ export class ParcelasService {
       );
   }
 
-  restore(data: Partial<ParcelaI>) {
-    const direction = this.url + 'parcelas/entities/deletes/' + data.id;
+  restore(data: Partial<ReservaI>) {
+    const direction = this.url + 'reservas/entities/deletes/' + data.id;
     return this.http
       .put<{
         ok: boolean;
-        result: ParcelaI;
+        result: ReservaI;
         msg: string;
       }>(direction, data)
       .pipe(
@@ -86,12 +86,12 @@ export class ParcelasService {
   }
 
   //! DELETE METHOD
-  softDelete(data: Partial<ParcelaI>) {
-    const direction = this.url + 'parcelas/' + data.id;
+  softDelete(data: Partial<ReservaI>) {
+    const direction = this.url + 'reservas/' + data.id;
     return this.http
       .delete<{
         ok: boolean;
-        result: ParcelaI;
+        result: ReservaI;
         msg: string;
       }>(direction)
       .pipe(

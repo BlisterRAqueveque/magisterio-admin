@@ -1,1 +1,182 @@
-<p>table-reservas works!</p>
+<div class="flex justify-center">
+    <button #btn1 (click)="activeBtn(btn1)" id="0"
+        class="btn-reservas transition-all duration-300 py-4 px-8 border-l border-b border-t border-gray-300">Reservas
+        pendientes</button>
+    <button #btn2 (click)="activeBtn(btn2)" id="1"
+        class="btn-reservas transition-all duration-300 py-4 px-8 border border-gray-300">Reservas
+        aprobadas</button>
+    <button #btn3 (click)="activeBtn(btn3)" id="-1"
+        class="btn-reservas transition-all duration-300 py-4 px-8 border-r border-b border-t border-gray-300">Reservas
+        rechazadas</button>
+</div>
+<!-- PAGINATOR -->
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+<!-- TABLE -->
+<div class="lg:flex lg:justify-center md:flex md:justify-center w-full overflow-auto sm:px-4 lg:px-0 md:px-0 px-4">
+    <p-table class="lg:w-3/4 md:w-3/4" #table [value]="reservas" dataKey="id" (onSort)="onSort($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">
+                    <p>ID <i class="pi pi-sort-alt"></i></p>
+                </th>
+                <th>
+                    <p>Nombre y apellido</p>
+                </th>
+                <th>
+                    <p>N° de socio</p>
+                </th>
+                <th>
+                    <p>Teléfono</p>
+                </th>
+                <th>
+                    <p>Correo</p>
+                </th>
+                <th>
+                    <p>Habitación</p>
+                </th>
+                <th>
+                    <p>Casa mutual</p>
+                </th>
+                <th>
+                    <p>Delegación</p>
+                </th>
+                <th>
+                    <p>Desde | hasta</p>
+                </th>
+                <th>
+                    <p>Fecha creado</p>
+                </th>
+                <th>
+                    <p>Fecha aprobado</p>
+                </th>
+                <th>
+                    <p>Aprobado por</p>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-reserva>
+            <tr class="item" (click)="onRowSelect(reserva)">
+                <td>{{ reserva.id }}</td>
+                <td>{{ reserva.nombre ? reserva.nombre : '' }} {{ reserva.apellido ? reserva.apellido : '' }}</td>
+                <td>{{ reserva.n_socio }}</td>
+                <td>{{ reserva.tel }}</td>
+                <td>{{ reserva.correo }}</td>
+                <td>{{ reserva.habitacion ? reserva.habitacion.nombre : 'No tiene' }}</td>
+                <td>{{ reserva.habitacion ? reserva.habitacion.casa_mutual ?
+                    reserva.habitacion.casa_mutual.nombre : 'No tiene' : 'No tiene' }}</td>
+                <td>{{ reserva.delegacion ? reserva.delegacion.nombre : 'No tiene' }}</td>
+                <td>{{ reserva.desde | date: 'dd/MM/yyyy' }} - {{ reserva.hasta | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ reserva.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ reserva.fecha_aprobado ? (reserva.fecha_aprobado | date: 'dd/MM/yyyy HH:mm')
+                    : 'Sin aprobar' }}</td>
+                <td>{{ reserva.usuario_aprobador ? reserva.usuario_aprobador.nombre_completo : 'No tiene' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<!-- PAGINATOR -->
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+
+<!-- ADD DIALOG -->
+<p-dialog [modal]="true" [(visible)]="visible" [draggable]="false" [style]="{ 'min-width': '50%' }"
+    (onHide)="resetValues()" [closeOnEscape]="false">
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+        <h4 class="text-2xl">Datos de la reserva:</h4>
+    </ng-template>
+
+    <!-- BODY -->
+    <div class="grid grid-cols-12 gap-4">
+        <!-- El ID solo se muestra cuando existe el registro -->
+        <div class="col-span-12 pt-2">
+            <div>
+                <p><b>Nombre y apellido</b>: {{ reserva?.nombre }} {{ reserva?.apellido }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>N° de socio</b>: {{ reserva?.n_socio }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Teléfono</b>: {{ reserva?.tel }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Correo</b>: {{ reserva?.correo }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Reserva desde</b>: {{ reserva?.desde | date: 'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Reserva hasta</b>: {{ reserva?.hasta | date: 'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Fecha creado</b>: {{ reserva?.fecha_creado | date: 'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p [ngClass]="{ 'text-green-500': reserva?.estado === 1, 'text-yellow-500': reserva?.estado === 0,
+                    'text-red-500': reserva?.estado === -1 }"><b class="text-gray-600">Estado</b>:
+                    {{ reserva?.estado === 0 ? 'Pendiente' : reserva?.estado === 1 ? 'Aprobado' : 'Rechazado' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Fecha resuelto</b>:
+                    {{ reserva?.fecha_aprobado ? (reserva?.fecha_aprobado | date: 'dd/MM/yyyy HH:mm') : 'Pendiente' }}
+                </p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Usuario aprobador</b>:
+                    {{ reserva?.usuario_aprobador ? reserva?.usuario_aprobador?.nombre_completo : 'Pendiente' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Delegación</b>: {{ reserva?.delegacion ? reserva?.delegacion?.nombre : 'No tiene' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Habitación reservada</b>: {{ reserva?.habitacion ? reserva?.habitacion?.nombre : 'No tiene' }}</p>
+            </div>
+        </div>
+        <div class="col-span-12">
+            <div>
+                <p><b>Casa mutual</b>:
+                    {{ reserva?.habitacion ? reserva?.habitacion?.casa_mutual ? reserva?.habitacion?.casa_mutual?.nombre : 'No tiene' : 'No tiene' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <ng-template pTemplate="footer">
+        @if(reserva?.estado === 0){
+        <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2 mr-4" (click)="edit(1)"><b>Aprobar</b></button>
+        <button pRipple class="bg-mag-600 hover:bg-mag-900 transition-all duration-300 rounded-lg
+            shadow-lg p-2 hover:text-white" (click)="edit(-1)"><b>Rechazar</b></button>
+        }
+    </ng-template>
+</p-dialog>
