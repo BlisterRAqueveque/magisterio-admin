@@ -1,7 +1,7 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
-import { HostService } from './core/host.service';
+import { HostService } from './core/services/host.service';
 
 @Component({
   selector: 'app-root',

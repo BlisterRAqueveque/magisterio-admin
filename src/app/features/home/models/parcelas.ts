@@ -15,4 +15,21 @@ export interface ParcelaI {
   casa_mutual: CasaMutualI;
 
   ediciones: EdicionI[];
+
+  ingresos: IngresoParcelaI[];
+}
+
+export interface IngresoParcelaI {
+  id: number;
+
+  n_socio: string;
+  nombre: string;
+  nombre_salida: string;
+
+  ingreso_fecha: Date;
+  salida_fecha: Date;
+
+  cerrado_por: UsuarioI;
+
+  parcela: ParcelaI;
 }

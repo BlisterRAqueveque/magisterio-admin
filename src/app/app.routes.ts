@@ -6,6 +6,7 @@ import { CasasMutualesComponent } from './features/home/pages/casas-mutuales/cas
 import { HabitacionesComponent } from './features/home/pages/habitaciones/habitaciones.component';
 import { ParcelasComponent } from './features/home/pages/parcelas/parcelas.component';
 import { ReservasComponent } from './features/home/pages/reservas/reservas.component';
+import { authLoginGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -44,5 +45,6 @@ export const routes: Routes = [
         component: ReservasComponent,
       },
     ],
+    canActivate: [authLoginGuard],
   },
 ];

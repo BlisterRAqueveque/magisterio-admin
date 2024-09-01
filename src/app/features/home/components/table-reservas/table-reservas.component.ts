@@ -8,7 +8,7 @@ import { RippleModule } from 'primeng/ripple';
 import { Table, TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService } from '../../../../core/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { LoaderService } from '../../../../shared/loader/loader.service';
 import { UsuarioI } from '../../../login/models/usuario';

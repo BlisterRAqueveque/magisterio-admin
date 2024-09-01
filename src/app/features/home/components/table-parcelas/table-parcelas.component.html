@@ -19,6 +19,9 @@
                     <p>Casa mutual</p>
                 </th>
                 <th>
+                    <p class="text-center">Ocupado</p>
+                </th>
+                <th>
                     <p>Creado por</p>
                 </th>
                 <th>
@@ -37,6 +40,14 @@
                 <td>{{ parcela.id }}</td>
                 <td>{{ parcela.nombre }}</td>
                 <td>{{ parcela.casa_mutual ? parcela.casa_mutual.nombre : 'No tiene' }}</td>
+                <td>
+                    <div class="w-full flex justify-center items-center">
+                        <div class="rounded-full px-2 py-1 cursor-pointer center"
+                            [ngClass]="{ 'bg-green-600 animate-pulse': setOcupado(parcela.ingresos),'bg-mag-400': !setOcupado(parcela.ingresos) }">
+                            <p><b>{{ setOcupado(parcela.ingresos) ? 'Si' : 'No' }}</b></p>
+                        </div>
+                    </div>
+                </td>
                 <td>{{ parcela.creado_por ? parcela.creado_por.nombre_completo : 'Sin definir' }}</td>
                 <td>{{ parcela.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <!-- Estado -->
@@ -125,8 +136,13 @@
             shadow-lg p-2" (click)="save()"><b>Crear nuevo registro</b></button>
         }
         @else {
+        @if(setOcupado(parcela.ingresos)){
+        <button pRipple class="bg-gray-400 animate-pulse text-white hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2 mr-4" (click)="modalIngresos.present()"><b>Ver ingreso actual</b></button>
+        }
+
         <button pRipple class="bg-gray-400 text-white hover:bg-mag-600 transition-all duration-300 rounded-lg
-                shadow-lg p-2 mr-4" (click)="modal.present()"><b>Registros de edición</b></button>
+            shadow-lg p-2 mr-4" (click)="modal.present()"><b>Registros de edición</b></button>
         <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
             shadow-lg p-2" (click)="edit()"><b>Modificar registro</b></button>
         }
@@ -224,5 +240,18 @@
         <p><b>Nombre: </b>{{ parcelaOld?.nombre }}</p>
         <p><b>Casa mutual: </b>{{ parcelaOld?.casa_mutual ? parcelaOld?.casa_mutual?.nombre! : 'No tiene' }}</p>
         <p><b>Activo: </b>{{ parcelaOld?.activo ? 'Activo' : 'Inactivo' }}</p>
+    </ng-template>
+</m-modal>
+
+<m-modal #modalIngresos header="Ingreso actual">
+    <ng-template #body>
+        <p class="text-lg"><b>Nombre: </b>{{ parcela?.ingresos![0].nombre }}</p>
+        <p class="text-lg"><b>N° de socio: </b>{{ parcela?.ingresos![0].n_socio }}</p>
+        <p class="text-lg"><b>Fecha de ingreso: </b>{{ parcela?.ingresos![0].ingreso_fecha | date: 'dd/MM/yyyy' }}</p>
+
+        <div class="w-full text-end mt-4">
+            <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+                shadow-lg p-2"><b>Marcar salida</b></button>
+        </div>
     </ng-template>
 </m-modal>

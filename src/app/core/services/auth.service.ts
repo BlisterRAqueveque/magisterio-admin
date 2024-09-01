@@ -2,27 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { environment } from '../../environments/environment';
 import {
   BehaviorSubject,
   catchError,
   EMPTY,
   firstValueFrom,
-  ignoreElements,
   map,
   of,
   switchMap,
   take,
   tap,
 } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import {
   LoginResponse,
   LoginUserDto,
   UsuarioI,
-} from '../features/login/models/usuario';
-import { handleError } from './tools';
+} from '../../features/login/models/usuario';
+import { handleError } from '../tools';
 
-const USER_COOKIE_KEY = 'x-token';
+export const USER_COOKIE_KEY = 'x-token';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -108,10 +107,16 @@ export class AuthService {
     this.removeUserFromCookie();
     this.user.next(null);
     this.router.navigate(['login'], { replaceUrl: true });
-    window.location.reload();
+    //window.location.reload();
   }
 
   private removeUserFromCookie() {
     this.cookie.set(USER_COOKIE_KEY, '', undefined, '/');
+  }
+
+  checkToken(token: string) {
+    return this.http
+      .put(this.url, { token })
+      .pipe(catchError((e) => handleError(e)));
   }
 }

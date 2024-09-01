@@ -5,7 +5,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { Table, TableModule } from 'primeng/table';
-import { AuthService } from '../../../../core/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
 import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { InputComponent } from '../../../../shared/input/input.component';
@@ -165,7 +165,6 @@ export class TableCasasComponent {
           this.dFin.value = dFin.toString();
           this.mesFin = this.months.find((m) => m.id === mFin);
           this.mFin.value = mFin.toString();
-          console.log(this.diaFin,this.mesFin);
         }
         this.casa.ediciones.forEach((e) => {
           if (e.descripcion.includes(' | antes: ')) {

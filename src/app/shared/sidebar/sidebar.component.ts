@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { UsuarioI } from '../../features/login/models/usuario';
-import { AuthService } from '../../core/auth.service';
+import { AuthService } from '../../core/services/auth.service';
+import { DialogService } from '../confirm-dialog/dialog.service';
 
 @Component({
   selector: 'm-sidebar',
@@ -62,7 +63,7 @@ export class SidebarComponent {
   async ngOnInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.buttons[0].activo = true;
-    this.navigate(this.buttons[4]);
+    this.navigate(this.buttons[0]);
   }
 
   private readonly router = inject(Router);
@@ -79,4 +80,15 @@ export class SidebarComponent {
   resize = false;
 
   show = false;
+
+  private readonly dialog = inject(DialogService);
+  logout() {
+    this.dialog.present(
+      'Confirmación de carga',
+      '¿Está seguro/a de cerrar la sesión?',
+      () => {
+        this.auth.logout();
+      }
+    );
+  }
 }

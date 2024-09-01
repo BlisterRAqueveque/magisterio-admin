@@ -72,6 +72,10 @@
                         @for (casa of usuario?.casa_mutual; track $index) {
                         <p class="text-xs pl-2 whitespace-nowrap text-ellipsis mb-2">{{ casa.nombre }}</p>
                         }
+
+                        <hr class="my-2">
+                        <p class="cursor-pointer center" (click)="logout()">Salir <i class="pi pi-sign-out ml-2"></i>
+                        </p>
                     </div>
                 </div>
             </div>

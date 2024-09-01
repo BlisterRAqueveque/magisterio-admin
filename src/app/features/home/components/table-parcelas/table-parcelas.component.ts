@@ -7,17 +7,20 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService } from '../../../../core/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
 import { InputComponent } from '../../../../shared/input/input.component';
 import { PresentModal } from '../../../../shared/modal/present-modal.component';
 import { UsuarioI } from '../../../login/models/usuario';
 import { CasaMutualI } from '../../models/casa.mutual';
-import { ParcelaI } from '../../models/parcelas';
+import { IngresoParcelaI, ParcelaI } from '../../models/parcelas';
 import { CasasMutualesService } from '../../service/casas.mutuales.service';
 import { ParcelasService } from '../../service/parcelas.service';
 import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { LoaderService } from '../../../../shared/loader/loader.service';
+import { SocketService } from '../../service/socket.service';
+import { environment } from '../../../../../environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'm-table-parcelas',
@@ -53,6 +56,51 @@ export class TableParcelasComponent {
 
   params = new HttpParams();
 
+  private readonly socket = inject(SocketService);
+
+  subscriptions: Subscription[] = [];
+
+  ngOnInit() {
+    this.connect();
+
+    this.subscriptions.push(
+      this.socket.listen('new-ingreso').subscribe((data: string) => {
+        const ingreso: IngresoParcelaI = JSON.parse(data);
+        const parcela = this.parcelas.find((p) => p.id === ingreso.parcela.id);
+        if (parcela) {
+          parcela.ingresos.unshift(ingreso);
+          //Object.assign(parcela)
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.socket.listen('update-ingreso').subscribe((data) => {
+        const ingreso: IngresoParcelaI = JSON.parse(data);
+        const parcela = this.parcelas.find((p) => p.id === ingreso.parcela.id);
+        if (parcela) {
+          const uIngreso = parcela.ingresos.find((i) => i.id === ingreso.id);
+          if (uIngreso) Object.assign(uIngreso, ingreso);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => {
+      s.unsubscribe();
+    });
+    this.disconnect();
+  }
+
+  connect() {
+    this.socket.connectSocket(environment.socket);
+  }
+
+  disconnect() {
+    this.socket.disconnectSocket();
+  }
+
   async ngAfterViewInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.params = this.params.set('page', 1);
@@ -81,6 +129,13 @@ export class TableParcelasComponent {
     this.service.getAll(this.params).subscribe({
       next: (data) => {
         this.parcelas = data.result;
+        this.parcelas.forEach((p) => {
+          p.ingresos.sort(
+            (a, b) =>
+              new Date(b.ingreso_fecha).getTime() -
+              new Date(a.ingreso_fecha).getTime()
+          );
+        });
         this.totalRecords = data.count;
         this.table.loading = false;
       },
@@ -476,4 +531,9 @@ export class TableParcelasComponent {
   //! DELETE METHODS --------------------------------------------------------------------->
 
   parcelaOld: ParcelaI | undefined;
+
+  setOcupado(ingresos: IngresoParcelaI[]) {
+    const ocupado = ingresos.some((i) => i.salida_fecha === null);
+    return ocupado;
+  }
 }

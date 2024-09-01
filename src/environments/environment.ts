@@ -1,3 +1,6 @@
+const url = 'https://magisterio.hvdevs.com/api/';
+
 export const environment = {
-  url: 'http://localhost:3000/api/',
+  url: url + 'api/',
+  socket: `${url}ingresos`,
 };

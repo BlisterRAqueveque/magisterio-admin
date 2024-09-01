@@ -11,7 +11,7 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService } from '../../../../core/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
 import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
 import { InputComponent } from '../../../../shared/input/input.component';
