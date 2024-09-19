@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ParcelaI } from '../models/parcelas';
 import { catchError, map } from 'rxjs';
-import { handleError } from '../../../core/tools';
+import { handleError } from '../../../core/tools/handle-error';
 
 @Injectable({ providedIn: 'root' })
 export class ParcelasService {

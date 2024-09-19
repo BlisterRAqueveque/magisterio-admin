@@ -1,24 +1,22 @@
+import { AuthService } from '@/app/core';
+import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
+import { InputComponent } from '@/app/shared/input/input.component';
+import { LoaderService } from '@/app/shared/loader/loader.service';
+import { PresentModal } from '@/app/shared/modal/present-modal.component';
+import { SelectComponent } from '@/app/shared/select/select.component';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { Paginator, PaginatorModule } from 'primeng/paginator';
-import { Table, TableModule } from 'primeng/table';
-import { AuthService } from '../../../../core/services/auth.service';
-import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { InputComponent } from '../../../../shared/input/input.component';
-import { LoaderService } from '../../../../shared/loader/loader.service';
-import { SelectComponent } from '../../../../shared/select/select.component';
-import { UsuarioI } from '../../../login/models/usuario';
-import { CasaMutualI } from '../../models/casa.mutual';
-import { CasasMutualesService } from '../../service/casas.mutuales.service';
-import { TooltipModule } from 'primeng/tooltip';
 import { SidebarModule } from 'primeng/sidebar';
-import { PresentModal } from '../../../../shared/modal/present-modal.component';
-import { CheckboxModule } from 'primeng/checkbox';
-import { months } from '../../models/months';
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
+import { CasaMutualI, months } from '../../models';
+import { CasasMutualesService } from '../../service';
+import { UsuarioI } from '@/app/features/login/models';
 
 @Component({
   selector: 'm-table-casas',

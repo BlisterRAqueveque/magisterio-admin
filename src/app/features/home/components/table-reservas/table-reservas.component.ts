@@ -1,3 +1,6 @@
+import { AuthService } from '@/app/core';
+import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
+import { LoaderService } from '@/app/shared/loader/loader.service';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
@@ -8,12 +11,9 @@ import { RippleModule } from 'primeng/ripple';
 import { Table, TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { LoaderService } from '../../../../shared/loader/loader.service';
-import { UsuarioI } from '../../../login/models/usuario';
-import { ReservaI } from '../../models/reservas';
-import { ReservasService } from '../../service/reservas.service';
+import { ReservaI } from '../../models';
+import { ReservasService } from '../../service';
+import { UsuarioI } from '@/app/features/login/models';
 
 @Component({
   selector: 'm-table-reservas',

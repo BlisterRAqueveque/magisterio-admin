@@ -1,4 +1,4 @@
-const url = 'https://magisterio.hvdevs.com/api/';
+const url = 'https://magisterio.hvdevs.com/';
 
 export const environment = {
   url: url + 'api/',

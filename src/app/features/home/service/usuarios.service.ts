@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { handleError } from '../../../core/tools';
+import { handleError } from '../../../core/tools/handle-error';
 import { UsuarioI } from '../../login/models/usuario';
 
 @Injectable({

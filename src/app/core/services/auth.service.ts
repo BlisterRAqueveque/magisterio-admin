@@ -19,7 +19,7 @@ import {
   LoginUserDto,
   UsuarioI,
 } from '../../features/login/models/usuario';
-import { handleError } from '../tools';
+import { handleError } from '../tools/handle-error';
 
 export const USER_COOKIE_KEY = 'x-token';
 

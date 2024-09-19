@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ComponentRef, inject, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ModalService } from './modal.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { HostService } from '../../core/services/host.service';
+import { HostService } from '@/app/core/services/host.service';
+import { ModalService } from './modal.service';
 
 @Component({
   standalone: true,

@@ -1,8 +1,8 @@
+import { AuthService } from '@/app/core';
+import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
+import { InputComponent } from '@/app/shared/input/input.component';
+import { LoaderService } from '@/app/shared/loader/loader.service';
 import { Component, HostListener, inject } from '@angular/core';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { InputComponent } from '../../../../shared/input/input.component';
-import { LoaderService } from '../../../../shared/loader/loader.service';
 import { RippleModule } from 'primeng/ripple';
 
 @Component({

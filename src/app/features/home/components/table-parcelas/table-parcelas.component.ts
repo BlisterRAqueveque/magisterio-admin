@@ -1,3 +1,10 @@
+import { AuthService } from '@/app/core';
+import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
+import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
+import { InputComponent } from '@/app/shared/input/input.component';
+import { LoaderService } from '@/app/shared/loader/loader.service';
+import { PresentModal } from '@/app/shared/modal/present-modal.component';
+import { environment } from '@/environments/environment';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
@@ -7,20 +14,14 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { AuthService } from '../../../../core/services/auth.service';
-import { AddButtonComponent } from '../../../../shared/add-button/add-button.component';
-import { InputComponent } from '../../../../shared/input/input.component';
-import { PresentModal } from '../../../../shared/modal/present-modal.component';
-import { UsuarioI } from '../../../login/models/usuario';
-import { CasaMutualI } from '../../models/casa.mutual';
-import { IngresoParcelaI, ParcelaI } from '../../models/parcelas';
-import { CasasMutualesService } from '../../service/casas.mutuales.service';
-import { ParcelasService } from '../../service/parcelas.service';
-import { DialogService } from '../../../../shared/confirm-dialog/dialog.service';
-import { LoaderService } from '../../../../shared/loader/loader.service';
-import { SocketService } from '../../service/socket.service';
-import { environment } from '../../../../../environments/environment';
 import { Subscription } from 'rxjs';
+import { ParcelaI, CasaMutualI, IngresoParcelaI } from '../../models';
+import {
+  ParcelasService,
+  CasasMutualesService,
+  SocketService,
+} from '../../service';
+import { UsuarioI } from '@/app/features/login/models';
 
 @Component({
   selector: 'm-table-parcelas',

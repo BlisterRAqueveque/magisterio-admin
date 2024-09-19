@@ -4,9 +4,9 @@ import { Buttons } from './models/buttons';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { UsuarioI } from '../../features/login/models/usuario';
-import { AuthService } from '../../core/services/auth.service';
 import { DialogService } from '../confirm-dialog/dialog.service';
+import { AuthService } from '@/app/core';
+import { UsuarioI } from '@/app/features/login/models';
 
 @Component({
   selector: 'm-sidebar',
