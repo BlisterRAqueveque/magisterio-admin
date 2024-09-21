@@ -1,0 +1,23 @@
+<div class="w-full bg-gray-50 rounded-sm" [ngClass]="{ 'px-2 py-4': !readonly }">
+    <div [ngClass]="{ 'flex items-center': !readonly }">
+        @if(!readonly) {
+        <div class="h-14 px-3 bg-white rounded-md flex justify-center items-center cursor-pointer
+                transition-all duration-300 hover:bg-mag-300 mr-4" (click)="file.click()">
+            <p><i class="pi-cloud-upload pi"></i> Subir archivo</p>
+        </div>
+        <input hidden type="file" #file (change)="uploadFile($event)"
+            accept="image/jpg, image/png, image/gif, image/jpeg">
+        }
+        <div class="relative flex justify-center items-center cursor-pointer group" [ngClass]="{ 'mr-2': !readonly }"
+            (click)="showImage()">
+            <img [src]="img ? img : 'assets/img/no-file.png'" alt="" class="h-14 w-14 object-contain">
+            <div class="flex justify-center items-center backdrop-blur-sm w-full h-full absolute bg-black/30
+                opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <i class="pi-eye pi absolute text-white"></i>
+            </div>
+        </div>
+        @if(!readonly){
+        <p>{{ img ? name : 'No se selecciono ningún archivo' }}</p>
+        }
+    </div>
+</div>

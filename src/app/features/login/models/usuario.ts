@@ -28,7 +28,7 @@ export interface UsuarioI {
 
   casa_mutual: CasaMutualI[];
 
-  reservas_aprovadas: ReservaI[];
+  reservas_aprobadas: ReservaI[];
 
   ediciones: EdicionI[];
 

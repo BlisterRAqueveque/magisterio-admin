@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableUsuariosComponent } from '../../components/table-usuarios/table-usuarios.component';
+import { TableUsuariosComponent } from '../../components';
 
 @Component({
   selector: 'app-usuarios',

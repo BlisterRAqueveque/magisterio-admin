@@ -1,0 +1,16 @@
+<div class="relative mt-6">
+    <p class="absolute top-1/2 -translate-y-1/2">{{ index + 1 }}.</p>
+    <div class="w-[90%] pl-5">
+        <m-textarea placeholder="Ingrese consideración" label="Considerando" type="text" [(value)]="considerando"
+            [error]="error" errorMessage="Falta completar consideración" />
+    </div>
+    <div class="flex justify-center items-center p-4 absolute top-1/2 -translate-y-1/2 right-0 rounded-full
+        bg-red-500 text-white cursor-pointer hover:bg-red-800 transition-all duration-200" pTooltip="Eliminar"
+        (click)="onDestruir()">
+        <i class="pi pi-trash"></i>
+    </div>
+
+    <div class="px-12 my-3">
+        <hr>
+    </div>
+</div>

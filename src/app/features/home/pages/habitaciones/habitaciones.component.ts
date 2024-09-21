@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableHabitacionesComponent } from '../../components/table-habitaciones/table-habitaciones.component';
+import { TableHabitacionesComponent } from '../../components';
 
 @Component({
   selector: 'app-habitaciones',

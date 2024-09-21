@@ -1,9 +1,4 @@
 import { AuthService } from '@/app/core';
-import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
-import { InputComponent } from '@/app/shared/input/input.component';
-import { LoaderService } from '@/app/shared/loader/loader.service';
-import { PresentModal } from '@/app/shared/modal/present-modal.component';
-import { SelectComponent } from '@/app/shared/select/select.component';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
@@ -13,10 +8,17 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
 import { CasaMutualI, months } from '../../models';
 import { CasasMutualesService } from '../../service';
 import { UsuarioI } from '@/app/features/login/models';
+import {
+  AddButtonComponent,
+  DialogService,
+  InputComponent,
+  LoaderService,
+  PresentModal,
+  SelectComponent,
+} from '@/app/shared';
 
 @Component({
   selector: 'm-table-casas',
@@ -33,7 +35,6 @@ import { UsuarioI } from '@/app/features/login/models';
     TooltipModule,
     SidebarModule,
     PresentModal,
-    SelectComponent,
   ],
   templateUrl: './table-casas.component.html',
   styleUrl: './table-casas.component.css',

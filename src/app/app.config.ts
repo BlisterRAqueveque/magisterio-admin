@@ -9,6 +9,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ModalService } from './shared/modal/modal.service';
 import { HostService } from './core/services/host.service';
 import { jwtInterceptor } from './core/interceptor/jwt.interceptor';
+import { BackdropService } from './shared/adjuntos/image/backdrop.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +21,6 @@ export const appConfig: ApplicationConfig = {
     DialogService,
     ModalService,
     HostService,
+    BackdropService,
   ],
 };

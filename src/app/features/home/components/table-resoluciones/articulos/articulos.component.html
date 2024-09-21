@@ -1,0 +1,20 @@
+<div class="w-full">
+    <div class="mt-6 relative">
+        <div class="w-[70%]">
+            <m-input type="number" [(value)]="art" placeholder="Ingrese n° de artículo" label="Artículo" [error]="error"
+                errorMessage="Falta completar n° de artículo" />
+        </div>
+        <div class="flex justify-center items-center p-4 absolute top-1/2 -translate-y-1/2 right-0 rounded-full
+        bg-red-500 text-white cursor-pointer hover:bg-red-800 transition-all duration-200" pTooltip="Eliminar"
+            (click)="onDestruir()">
+            <i class="pi pi-trash"></i>
+        </div>
+    </div>
+    <div class="mt-6">
+        <m-textarea [(value)]="desc" placeholder="Ingrese descripción" label="Descripción" [error]="error"
+            errorMessage="Falta ingresar descripción" />
+    </div>
+    <div class="px-12 my-3">
+        <hr>
+    </div>
+</div>

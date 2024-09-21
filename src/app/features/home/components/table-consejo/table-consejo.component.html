@@ -1,0 +1,261 @@
+<!-- PAGINATOR -->
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+<!-- TABLE -->
+<div class="lg:flex lg:justify-center md:flex md:justify-center w-full overflow-auto sm:px-4 lg:px-0 md:px-0 px-4">
+    <p-table class="lg:w-3/4 md:w-3/4" #table [value]="directivos" dataKey="id" (onSort)="onSort($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">
+                    <p>ID <i class="pi pi-sort-alt"></i></p>
+                </th>
+                <th>
+                    <p>Nombre</p>
+                </th>
+                <th>
+                    <p>Cargo</p>
+                </th>
+                <th>
+                    <p>N° de socio</p>
+                </th>
+                <th>
+                    <p>DNI</p>
+                </th>
+                <th>
+                    <p>Creado por</p>
+                </th>
+                <th>
+                    <p>Fecha creado</p>
+                </th>
+                <th>
+                    <p>Estado</p>
+                </th>
+                <th>
+                    <p class="text-center">Acciones</p>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-directivo>
+            <tr class="item" (click)="onRowSelect(directivo)">
+                <td>{{ directivo.id }}</td>
+                <td>{{ directivo.nombre }}</td>
+                <td>{{ directivo.cargo }}</td>
+                <td>{{ directivo.n_socio }}</td>
+                <td>{{ directivo.dni }}</td>
+                <td>{{ directivo.creado_por ? directivo.creado_por.nombre_completo : 'Sin definir' }}</td>
+                <td>{{ directivo.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <!-- Estado -->
+                <td pTooltip="{{ 'Activo: Se muestran los registros en las aplicaciones\n\nInactivo: No se muestran los registros en las aplicaciones' }}"
+                    tooltipPosition="left" class="flex items-center">
+                    <p class="text-sm p-2 text-white rounded-lg"
+                        [ngClass]="{ 'bg-green-600': directivo.activo, 'bg-red-600': !directivo.activo }">
+                        <b>{{ directivo.activo ? 'Activo' : 'Inactivo' }}</b>
+                    </p>
+                </td>
+                <!-- Acciones -->
+                <td>
+                    <div class="w-full flex justify-between items-center">
+                        <!-- Activar | desactivar -->
+                        <div pTooltip="Activar | Desactivar" tooltipPosition="left"
+                            (click)="otherAction = true; changeState(directivo.activo, directivo.id)"
+                            class="center rounded-full px-2 py-1 cursor-pointer"
+                            [ngClass]="{ 'bg-mag-300': directivo.activo, 'bg-green-600': !directivo.activo }">
+                            <i class="pi pi-minus-circle text-white text-xl"></i>
+                        </div>
+                        <!-- Eliminar -->
+                        <div pTooltip="Eliminar" tooltipPosition="left"
+                            (click)="otherAction = true; softDelete(directivo)"
+                            class="bg-red-600 rounded-full px-2 py-1 cursor-pointer center">
+                            <i class="pi pi-trash text-white text-xl"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<!-- PAGINATOR -->
+<div class="flex justify-center">
+    <p-paginator #paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} de {totalRecords}"></p-paginator>
+</div>
+<div class="w-full flex justify-start pl-10">
+    <div class="center p-2 rounded-md bg-mag-400 cursor-pointer" pTooltip="Ver registros eliminados"
+        (click)="sidebarVisible = true" tooltipPosition="right">
+        <i class="pi pi-window-maximize"></i>
+    </div>
+</div>
+
+<!-- ADD BUTTON -->
+<m-add-button (click)="visible = true" />
+
+<!-- ADD DIALOG -->
+<p-dialog [modal]="true" [(visible)]="visible" [draggable]="false" [style]="{ 'min-width': '50%' }"
+    (onHide)="resetValues()" [closeOnEscape]="false">
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+        <h4 class="text-2xl">{{ !directivo ? 'Crear nuevo directivo' : 'Modificar directivo'}}</h4>
+    </ng-template>
+
+    <!-- BODY -->
+    <div class="grid grid-cols-12 gap-4">
+        <!-- El ID solo se muestra cuando existe el registro -->
+        @if(directivo) {
+        <div class="col-span-12 pt-2">
+            <div class="pt-3">
+                <m-input label="ID" type="number" [(value)]="directivo.id" [readonly]="true" />
+            </div>
+        </div>
+        }
+        <div class="col-span-12" [ngClass]="{ 'pt-2': !directivo }">
+            <div class="pt-3">
+                <m-input placeholder="Ingrese nombre" label="Nombre" type="text" [(value)]="nombre" [error]="error"
+                    errorMessage="Falta completar nombre" />
+            </div>
+        </div>
+        <div class="col-span-12" [ngClass]="{ 'pt-2': !directivo }">
+            <div class="pt-3">
+                <m-input placeholder="Ingrese cargo" label="Cargo" type="text" [(value)]="cargo" [error]="error"
+                    errorMessage="Falta completar cargo" />
+            </div>
+        </div>
+        <div class="col-span-12" [ngClass]="{ 'pt-2': !directivo }">
+            <div class="pt-3">
+                <m-input placeholder="Ingrese n° socio" label="N° socio" type="text" [(value)]="n_socio" [error]="error"
+                    errorMessage="Falta completar n° socio" />
+            </div>
+        </div>
+        <div class="col-span-12" [ngClass]="{ 'pt-2': !directivo }">
+            <div class="pt-3">
+                <m-input placeholder="Ingrese DNI" label="DNI" type="text" [(value)]="dni" [error]="error"
+                    errorMessage="Falta completar DNI" />
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <ng-template pTemplate="footer">
+        @if(!directivo) {
+        <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2" (click)="save()"><b>Crear nuevo registro</b></button>
+        }
+        @else {
+        <button pRipple class="bg-gray-400 text-white hover:bg-mag-600 transition-all duration-300 rounded-lg
+                shadow-lg p-2 mr-4" (click)="modal.present()"><b>Registros de edición</b></button>
+        <button pRipple class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2" (click)="edit()"><b>Modificar registro</b></button>
+        }
+    </ng-template>
+</p-dialog>
+
+<p-sidebar [(visible)]="sidebarVisible" [fullScreen]="true">
+    <ng-template pTemplate="header">
+        <span class="font-semibold text-xl">
+            Directivos eliminados
+        </span>
+    </ng-template>
+    <p-table [value]="directivos_deletes">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    <p>ID</p>
+                </th>
+                <th>
+                    <p>Nombre</p>
+                </th>
+                <th>
+                    <p>Cargo</p>
+                </th>
+                <th>
+                    <p>N° de socio</p>
+                </th>
+                <th>
+                    <p>DNI</p>
+                </th>
+                <th>
+                    <p>Creado por</p>
+                </th>
+                <th>
+                    <p>Fecha creado</p>
+                </th>
+                <th>
+                    <p>Fecha eliminado</p>
+                </th>
+                <th>
+                    <p class="text-center">Acciones</p>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-directivo>
+            <tr>
+                <td>{{ directivo.id }}</td>
+                <td>{{ directivo.nombre }}</td>
+                <td>{{ directivo.cargo }}</td>
+                <td>{{ directivo.n_socio }}</td>
+                <td>{{ directivo.dni }}</td>
+                <td>{{ directivo.creado_por ? directivo.creado_por.nombre_completo : 'Sin definir' }}</td>
+                <td>{{ directivo.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ directivo.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <div class="w-full flex justify-center items-center">
+                    <!-- Restaurar -->
+                    <div pTooltip="Restaurar" tooltipPosition="left" (click)="otherAction = true; restore(directivo)"
+                        class="bg-green-600 rounded-full px-2 py-1 cursor-pointer center">
+                        <i class="pi pi-check-circle text-white text-xl"></i>
+                    </div>
+                </div>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-sidebar>
+
+<m-modal header="Registro de ediciones" #modal>
+    <ng-template #body>
+        @if(directivo) {
+        <p-table [value]="directivo.ediciones">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <p>ID</p>
+                    </th>
+                    <th>
+                        <p>Descripción</p>
+                    </th>
+                    <th>
+                        <p>Fecha edición</p>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-edicion>
+                <tr>
+                    <td>{{ edicion.id }}</td>
+                    <td class="flex justify-between items-center">
+                        {{ edicion.descripcion }}
+                        @if(edicion.objeto){
+                        <div pTooltip="Ver datos" tooltipPosition="left"
+                            (click)="directivoOld = edicion.objeto; modalObjeto.present()"
+                            class="bg-green-600 rounded-lg px-2 py-1 cursor-pointer center">
+                            <p class="text-white text-sm">Ver datos</p>
+                        </div>
+                        }
+                    </td>
+                    <td>{{ edicion.fecha_editado | date: 'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        }
+    </ng-template>
+</m-modal>
+
+<m-modal #modalObjeto header="Datos anteriores">
+    <ng-template #body>
+        <p><b>Nombre: </b>{{ directivoOld?.nombre }}</p>
+        <p><b>Cargo: </b>{{ directivoOld?.cargo }}</p>
+        <p><b>N° de socio: </b>{{ directivoOld?.n_socio }}</p>
+        <p><b>DNI: </b>{{ directivoOld?.dni }}</p>
+        <p><b>Activo: </b>{{ directivoOld?.activo ? 'Activo' : 'Inactivo' }}</p>
+    </ng-template>
+</m-modal>

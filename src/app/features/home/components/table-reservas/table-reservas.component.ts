@@ -1,6 +1,4 @@
 import { AuthService } from '@/app/core';
-import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
-import { LoaderService } from '@/app/shared/loader/loader.service';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
@@ -14,6 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ReservaI } from '../../models';
 import { ReservasService } from '../../service';
 import { UsuarioI } from '@/app/features/login/models';
+import { DialogService, LoaderService } from '@/app/shared';
 
 @Component({
   selector: 'm-table-reservas',

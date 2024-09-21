@@ -1,0 +1,22 @@
+<div class="w-full relative">
+
+    <!-- Input label -->
+    @if(label) {
+    <label class="absolute pointer-events-none transition-all duration-200 pl-4"
+        [ngClass]="{ '-top-6 translate-y-0 pl-1': hasFocus || value(), 'top-7 -translate-y-1/2': !hasFocus && !value() }">
+        <b class="text-gray-600">{{ label }}</b>
+    </label>
+    }
+
+    <!-- Input -->
+    <textarea (focus)="hasFocus = true" (blur)="hasFocus = false" [readOnly]="readonly"
+        [placeholder]="label && hasFocus ? placeholder : label && !hasFocus ? '' : placeholder" [(ngModel)]="value"
+        class="border-mag-200 border rounded-lg p-4 outline-mag-300 transition-all duration-300 w-full"
+        [ngClass]="{ 'border-red-600 outline-red-600': error && !value() }"></textarea>
+
+</div>
+<div class="hide" [ngClass]="{ 'show': error && !value() }">
+    <div>
+        <p class="pl-4 text-red-600">{{ errorMessage }}*</p>
+    </div>
+</div>

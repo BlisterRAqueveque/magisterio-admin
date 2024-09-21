@@ -1,9 +1,4 @@
 import { AuthService } from '@/app/core';
-import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
-import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
-import { InputComponent } from '@/app/shared/input/input.component';
-import { LoaderService } from '@/app/shared/loader/loader.service';
-import { PresentModal } from '@/app/shared/modal/present-modal.component';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, inject, ViewChild } from '@angular/core';
@@ -20,6 +15,13 @@ import { TooltipModule } from 'primeng/tooltip';
 import { HabitacionI, CasaMutualI } from '../../models';
 import { HabitacionesService, CasasMutualesService } from '../../service';
 import { UsuarioI } from '@/app/features/login/models';
+import {
+  AddButtonComponent,
+  DialogService,
+  InputComponent,
+  LoaderService,
+  PresentModal,
+} from '@/app/shared';
 
 @Component({
   selector: 'm-table-habitaciones',

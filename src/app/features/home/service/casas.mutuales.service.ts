@@ -1,9 +1,9 @@
+import { handleError } from '@/app/core';
+import { environment } from '@/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { CasaMutualI } from '../models/casa.mutual';
 import { catchError, map } from 'rxjs';
-import { handleError } from '../../../core/tools/handle-error';
+import { CasaMutualI } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class CasasMutualesService {

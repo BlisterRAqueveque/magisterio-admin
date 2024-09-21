@@ -1,9 +1,4 @@
 import { AuthService } from '@/app/core';
-import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
-import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
-import { InputComponent } from '@/app/shared/input/input.component';
-import { LoaderService } from '@/app/shared/loader/loader.service';
-import { PresentModal } from '@/app/shared/modal/present-modal.component';
 import { environment } from '@/environments/environment';
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
@@ -22,6 +17,13 @@ import {
   SocketService,
 } from '../../service';
 import { UsuarioI } from '@/app/features/login/models';
+import {
+  AddButtonComponent,
+  InputComponent,
+  PresentModal,
+  LoaderService,
+  DialogService,
+} from '@/app/shared';
 
 @Component({
   selector: 'm-table-parcelas',

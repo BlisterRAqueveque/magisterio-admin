@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableReservasComponent } from '../../components/table-reservas/table-reservas.component';
+import { TableReservasComponent } from '../../components';
 
 @Component({
   selector: 'app-reservas',

@@ -5,18 +5,16 @@
     <div class="w-full text-center py-2">
         <h1 class="text-2xl">Bienvenidos al sistema de gestión de <br><b>Mutual Magisterio</b></h1>
     </div>
-    <form action="post">
-        <div class="lg:w-screen md:w-screen py-4 max-w-[600px]">
-            <m-input placeholder="Ingrese usuario" label="Usuario" [(value)]="usuario" icon="pi-user" type="text" />
-        </div>
-        <div class="lg:w-screen md:w-screen py-4 max-w-[600px]">
-            <m-input placeholder="Ingrese contraseña" label="Contraseña" [(value)]="pass" icon="pi-lock"
-                [isPassword]="true" type="password" />
-        </div>
+    <div class="lg:w-screen md:w-screen py-4 max-w-[600px]">
+        <m-input placeholder="Ingrese usuario" label="Usuario" [(value)]="usuario" icon="pi-user" type="text" />
+    </div>
+    <div class="lg:w-screen md:w-screen py-4 max-w-[600px]">
+        <m-input placeholder="Ingrese contraseña" label="Contraseña" [(value)]="pass" icon="pi-lock" [isPassword]="true"
+            type="password" />
+    </div>
 
-        <div class="w-full text-end py-2">
-            <button pRipple type="submit" (click)="login($event)" class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
-                shadow-lg p-2">Ingresar</button>
-        </div>
-    </form>
+    <div class="w-full text-end py-2">
+        <button #button pRipple (click)="login($event)" class="bg-mag-400 hover:bg-mag-600 transition-all duration-300 rounded-lg
+            shadow-lg p-2">Ingresar</button>
+    </div>
 </div>

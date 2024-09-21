@@ -30,30 +30,63 @@ export class SidebarComponent {
       activo: false,
       link: 'usuarios',
       icono: 'pi-user',
+      isWS: false,
     },
     {
       nombre: 'Casas mutuales',
       activo: false,
       link: 'casas-mutuales',
       icono: 'pi-sitemap',
+      isWS: false,
     },
     {
       nombre: 'Habitaciones',
       activo: false,
       link: 'habitaciones',
       icono: 'pi-key',
+      isWS: false,
     },
     {
       nombre: 'Parcelas',
       activo: false,
       link: 'parcelas',
       icono: 'pi-map-marker',
+      isWS: false,
     },
     {
       nombre: 'Reservas',
       activo: false,
       link: 'reservas',
       icono: 'pi-calendar',
+      isWS: false,
+    },
+    {
+      nombre: 'Consejo directivo',
+      activo: false,
+      link: 'consejo',
+      icono: 'pi-users',
+      isWS: true,
+    },
+    {
+      nombre: 'Junta fiscalización',
+      activo: false,
+      link: 'junta',
+      icono: 'pi-users',
+      isWS: true,
+    },
+    {
+      nombre: 'Noticias',
+      activo: false,
+      link: 'noticias',
+      icono: 'pi-megaphone',
+      isWS: true,
+    },
+    {
+      nombre: 'Resoluciones',
+      activo: false,
+      link: 'resol',
+      icono: 'pi-file-check',
+      isWS: true,
     },
   ];
 
@@ -63,7 +96,7 @@ export class SidebarComponent {
   async ngOnInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.buttons[0].activo = true;
-    this.navigate(this.buttons[0]);
+    this.navigate(this.buttons[8]);
   }
 
   private readonly router = inject(Router);

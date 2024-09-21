@@ -8,16 +8,18 @@ import { SidebarModule } from 'primeng/sidebar';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
-import { DialogService } from '@/app/shared/confirm-dialog/dialog.service';
 import { AuthService } from '@/app/core';
-import { AddButtonComponent } from '@/app/shared/add-button/add-button.component';
-import { InputComponent } from '@/app/shared/input/input.component';
-import { LoaderService } from '@/app/shared/loader/loader.service';
-import { PresentModal } from '@/app/shared/modal/present-modal.component';
-import { SelectComponent } from '@/app/shared/select/select.component';
 import { CasaMutualI } from '../../models';
 import { UsuariosService, CasasMutualesService } from '../../service';
 import { UsuarioI } from '@/app/features/login/models';
+import {
+  InputComponent,
+  SelectComponent,
+  AddButtonComponent,
+  PresentModal,
+  LoaderService,
+  DialogService,
+} from '@/app/shared';
 
 @Component({
   selector: 'm-table-usuarios',

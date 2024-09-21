@@ -3,4 +3,5 @@ export interface Buttons {
   activo: boolean;
   link: string;
   icono: string;
+  isWS: boolean;
 }

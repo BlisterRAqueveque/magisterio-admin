@@ -18,9 +18,10 @@
 </div> -->
 
 <!-- Larger screen -->
-<div class="h-full transition-all duration-300 text-white lg:block md:block p-3 sm:hidden hidden"
-    [ngClass]="{ 'w-24': resize, 'w-64': !resize }">
-    <div class="relative h-full w-full bg-mag-950 rounded-xl shadow-md" [ngClass]="{ 'pl-3': !resize, 'p-0': resize }">
+<div class="h-full transition-all duration-300 text-white lg:block md:block p-3 sm:hidden hidden overflow-x-hidden overflow-y-auto custom-scrollbar"
+    [ngClass]="{ 'w-24': resize, 'w-72': !resize }">
+    <div class="relative min-h-full w-full bg-mag-950 rounded-xl shadow-md"
+        [ngClass]="{ 'pl-3': !resize, 'p-0': resize }">
         <i class="pi pi-angle-double-left absolute right-5 top-2 cursor-pointer text-xl transition-all duration-500"
             (click)="resize = !resize" [ngClass]="{ '-rotate-180': resize }"></i>
         <!-- HEADER -->
@@ -29,6 +30,7 @@
         </div>
 
         @for(button of buttons; track $index){
+        @if(!button.isWS) {
         <div class="relative w-full group cursor-pointer mb-2" (click)="navigate(button)">
             @if(!resize) {
             <!-- Background animation full size -->
@@ -44,15 +46,51 @@
                 <!-- Background animation resize -->
                 <div class="absolute top-0 left-0 w-full h-full px-3 z-0">
                     <div class="w-full h-full rounded-full transition-all duration-300" [ngClass]="{ 'bg-gray-900': button.activo,
-                        'bg-transparent': !button.activo }"></div>
+                                'bg-transparent': !button.activo }"></div>
                 </div>
                 }
                 <i class="pi {{ button.icono }} text-2xl z-10"></i>
                 <p class="text-nowrap text-ellipsis absolute left-12" [ngClass]="{ 'opacity-0 transition-all duration-75': resize,
-                    'transition-all duration-500': !resize }">{{ button.nombre }}</p>
+                            'transition-all duration-500': !resize }">{{ button.nombre }}</p>
             </div>
         </div>
         }
+        }
+
+        <!-- WEB SERVICES -->
+        <div class="pr-3 py-5">
+            <hr>
+        </div>
+        @for(button of buttons; track $index){
+        @if(button.isWS) {
+        <div class="relative w-full group cursor-pointer mb-2" (click)="navigate(button)">
+            @if(!resize) {
+            <!-- Background animation full size -->
+            <div class="absolute right-0 top-0 w-0 h-full z-0 group-hover:w-full transition-all duration-200"
+                [ngClass]="{ 'w-full': button.activo }">
+                <div class="w-full h-full bg-gray-900 rounded-tl-2xl rounded-bl-2xl"></div>
+            </div>
+            }
+            <div class="rounded-full flex items-center py-2 px-3 text-gray-200 relative z-10 bg-transparent text-xl"
+                [ngClass]="{ 'justify-start': !resize, 'justify-center': resize }" [pTooltip]="button.nombre"
+                tooltipPosition="right" [tooltipDisabled]="!resize">
+                @if(resize) {
+                <!-- Background animation resize -->
+                <div class="absolute top-0 left-0 w-full h-full px-3 z-0">
+                    <div class="w-full h-full rounded-full transition-all duration-300" [ngClass]="{ 'bg-gray-900': button.activo,
+                                    'bg-transparent': !button.activo }"></div>
+                </div>
+                }
+                <i class="pi {{ button.icono }} text-2xl z-10"></i>
+                <p class="text-nowrap text-ellipsis absolute left-12" [ngClass]="{ 'opacity-0 transition-all duration-75': resize,
+                                'transition-all duration-500': !resize }">{{ button.nombre }}</p>
+            </div>
+        </div>
+        }
+        }
+
+        <div class="h-44"></div>
+
         @if(!resize) {
         <!-- USER'S INFO -->
         <div class="absolute bottom-0 left-0 w-full p-2" @fadeInOut>
@@ -67,15 +105,18 @@
                 <div class="hide" [ngClass]="{ 'show': show }">
                     <div class="text-sm">
                         <hr class="my-2">
-                        <p><b>Casa/s mutual/es</b></p>
-                        <hr class="my-2">
-                        @for (casa of usuario?.casa_mutual; track $index) {
-                        <p class="text-xs pl-2 whitespace-nowrap text-ellipsis mb-2">{{ casa.nombre }}</p>
-                        }
-
-                        <hr class="my-2">
                         <p class="cursor-pointer center" (click)="logout()">Salir <i class="pi pi-sign-out ml-2"></i>
                         </p>
+                        <hr class="my-2">
+
+                        <div class="max-h-20 overflow-auto custom-scrollbar">
+                            <p><b>Mis casa/s mutual/es</b></p>
+                            <hr class="my-2">
+                            @for (casa of usuario?.casa_mutual; track $index) {
+                            <p class="text-xs pl-2 whitespace-nowrap text-ellipsis mb-2">{{ casa.nombre }}</p>
+                            }
+                        </div>
+
                     </div>
                 </div>
             </div>

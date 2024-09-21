@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableParcelasComponent } from '../../components/table-parcelas/table-parcelas.component';
+import { TableParcelasComponent } from '../../components';
 
 @Component({
   selector: 'app-parcelas',
