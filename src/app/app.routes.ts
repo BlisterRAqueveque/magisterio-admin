@@ -11,6 +11,7 @@ import { ConsejoDirectivoComponent } from './features/home/pages/consejo-directi
 import { JuntaFiscalizacionComponent } from './features/home/pages/junta-fiscalizacion/junta-fiscalizacion.component';
 import { NoticiasComponent } from './features/home/pages/noticias/noticias.component';
 import { ResolucionesComponent } from './features/home/pages/resoluciones/resoluciones.component';
+import { DelegacionesComponent } from './features/home/pages/delegaciones/delegaciones.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,10 @@ export const routes: Routes = [
       {
         path: 'casas-mutuales',
         component: CasasMutualesComponent,
+      },
+      {
+        path: 'delegaciones',
+        component: DelegacionesComponent,
       },
       {
         path: 'habitaciones',

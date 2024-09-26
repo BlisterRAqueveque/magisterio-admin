@@ -75,6 +75,13 @@ export class SidebarComponent {
       isWS: true,
     },
     {
+      nombre: 'Delegaciones',
+      activo: false,
+      link: 'delegaciones',
+      icono: 'pi-globe',
+      isWS: true,
+    },
+    {
       nombre: 'Noticias',
       activo: false,
       link: 'noticias',
@@ -96,7 +103,7 @@ export class SidebarComponent {
   async ngOnInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.buttons[0].activo = true;
-    this.navigate(this.buttons[8]);
+    this.navigate(this.buttons[7]);
   }
 
   private readonly router = inject(Router);

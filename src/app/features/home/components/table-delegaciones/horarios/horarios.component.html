@@ -1,0 +1,16 @@
+<div class="w-full">
+    <div class="mt-6 relative">
+        <div class="w-[70%]">
+            <m-input type="text" [(value)]="horario" placeholder="Ingrese horarios" label="Horarios" [error]="error"
+                errorMessage="Falta completar horario" />
+        </div>
+        <div class="flex justify-center items-center p-4 absolute top-1/2 -translate-y-1/2 right-0 rounded-full
+        bg-red-500 text-white cursor-pointer hover:bg-red-800 transition-all duration-200" pTooltip="Eliminar"
+            (click)="onDestruir()">
+            <i class="pi pi-trash"></i>
+        </div>
+    </div>
+    <div class="px-12 my-3">
+        <hr>
+    </div>
+</div>

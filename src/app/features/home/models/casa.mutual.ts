@@ -1,4 +1,5 @@
 import { UsuarioI } from '../../login/models/usuario';
+import { CasaHorarioI } from './delegaciones';
 import { EdicionI } from './ediciones';
 import { HabitacionI } from './habitaciones';
 import { HorarioI } from './horarios';
@@ -22,6 +23,8 @@ export interface CasaMutualI {
   habitaciones: HabitacionI[];
   parcelas: ParcelaI[];
   horarios: HorarioI | null;
+
+  casa_horarios: CasaHorarioI[];
 
   ediciones: EdicionI[];
 }

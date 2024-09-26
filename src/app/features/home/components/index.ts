@@ -15,3 +15,5 @@ export * from './table-reservas/table-reservas.component';
 export * from './table-resoluciones/table-resoluciones.component';
 
 export * from './table-usuarios/table-usuarios.component';
+
+export * from './table-delegaciones/table-delegaciones.component';
