@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AuthService } from '@/app/core';
+import { Component, inject } from '@angular/core';
 import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -9,4 +10,14 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './add-button.component.html',
   styleUrl: './add-button.component.css',
 })
-export class AddButtonComponent {}
+export class AddButtonComponent {
+  private readonly auth = inject(AuthService);
+
+  isAdmin: boolean | undefined;
+
+  async ngOnInit() {
+    this.auth.returnUserInfo().then((data) => {
+      this.isAdmin = data?.admin;
+    });
+  }
+}

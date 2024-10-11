@@ -103,7 +103,7 @@ export class SidebarComponent {
   async ngOnInit() {
     this.usuario = await this.auth.returnUserInfo();
     this.buttons[0].activo = true;
-    this.navigate(this.buttons[7]);
+    this.navigate(this.buttons[0]);
   }
 
   private readonly router = inject(Router);

@@ -23,6 +23,7 @@ export interface UsuarioI {
   primer_login: Date;
   activo: boolean;
   borrado_el: Date;
+  admin: boolean;
 
   carga_casa_mutual: CasaMutualI[];
 

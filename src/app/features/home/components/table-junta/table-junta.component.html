@@ -33,9 +33,11 @@
                 <th>
                     <p>Estado</p>
                 </th>
+                @if(usuario?.admin) {
                 <th>
                     <p class="text-center">Acciones</p>
                 </th>
+                }
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-junta>
@@ -56,6 +58,7 @@
                     </p>
                 </td>
                 <!-- Acciones -->
+                @if(usuario?.admin) {
                 <td>
                     <div class="w-full flex justify-between items-center">
                         <!-- Activar | desactivar -->
@@ -72,6 +75,7 @@
                         </div>
                     </div>
                 </td>
+                }
             </tr>
         </ng-template>
     </p-table>
@@ -184,9 +188,11 @@
                 <th>
                     <p>Fecha eliminado</p>
                 </th>
+                @if(usuario?.admin) {
                 <th>
                     <p class="text-center">Acciones</p>
                 </th>
+                }
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-junta>
@@ -199,6 +205,7 @@
                 <td>{{ junta.creado_por ? junta.creado_por.nombre_completo : 'Sin definir' }}</td>
                 <td>{{ junta.fecha_creado | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ junta.borrado_el | date: 'dd/MM/yyyy HH:mm' }}</td>
+                @if(usuario?.admin) {
                 <div class="w-full flex justify-center items-center">
                     <!-- Restaurar -->
                     <div pTooltip="Restaurar" tooltipPosition="left" (click)="otherAction = true; restore(junta)"
@@ -206,6 +213,7 @@
                         <i class="pi pi-check-circle text-white text-xl"></i>
                     </div>
                 </div>
+                }
             </tr>
         </ng-template>
     </p-table>
